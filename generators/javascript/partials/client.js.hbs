@@ -1,0 +1,37 @@
+/**
+ * The base api client instance. Allows multiple instances to be created
+ * with different configuration options.
+ */
+var Client = function (options) {
+  this.options = extend({
+    baseUri: {{{stringify baseUri}}},
+    baseUriParameters: {{{stringify (object (keys baseUriParameters) (pluck baseUriParameters 'default'))}}}
+  }, options);
+
+  this.resources = new {{pascalCase resources.id}}('', this);
+};
+
+/**
+ * Every client instance has a property for handling HTTP requests.
+ *
+ * @param  {Object} options
+ * @return {Object}
+ */
+Client.prototype.request = function (options) {
+  return new Request(options);
+};
+
+/**
+ * Create a multipart form instance with set parameters.
+ *
+ * @param  {Object}   parameters
+ * @return {FormData}
+ */
+Client.prototype.form = function (parameters) {
+  return toFormData(parameters);
+};
+
+{{!-- Externalize some reusable properties. --}}
+Client.prototype.version  = {{{stringify version}}};
+Client.prototype.Request  = Request;
+Client.prototype.FormData = FormData;

@@ -1,0 +1,61 @@
+/**
+ * Consistenty handle HTTP requests.
+ *
+ * @param  {Object} client
+ * @param  {String} uri
+ * @param  {String} method
+ * @param  {Object} body
+ * @param  {Object} options
+ * @return {Object}
+ */
+var handleRequest = function (client, uri, method, body, options) {
+  // Extend the base client options with passed in options.
+  options = extend({}, client.options, options);
+
+  // Set options that should never be overriden.
+  options.uri    = template(options.baseUri.replace(/\/+$/, ''), options.baseUriParameters) + uri;
+  options.method = method;
+
+  if (method === 'GET' || method === 'HEAD') {
+    options.query = toQueryString(body == null ? options.query : body);
+    options.body  = toRequestBody(options.body, options.headers);
+  } else {
+    options.body  = toRequestBody(body == null ? options.body : body, options.headers);
+    options.query = toQueryString(options.query);
+  }
+
+  {{!-- Make the client object request with sanitized options. --}}
+  return client.request(options);
+};
+
+{{#each allResources}}
+var {{pascalCase id}} = function (uri, client) {
+  this._uri    = uri;
+  this._client = client;
+
+  {{#each children}}
+  {{#unless uriParameters}}
+  this.{{@key}} = new {{pascalCase id}}(uri + {{{stringify relativeUri}}}, client);
+  {{/unless}}
+  {{/each}}
+};
+
+{{#each children}}
+{{#if uriParameters}}
+{{pascalCase ../../id}}.prototype.{{@key}} = function (/* ...args */) {
+  var uri = this._uri + template({{{stringify relativeUri}}}, arguments, {{{stringify (pluck uriParameters 'default')}}});
+
+  return new {{pascalCase id}}(uri, this._client);
+};
+{{/if}}
+{{/each}}
+
+{{#each methods}}
+{{pascalCase ../id}}.prototype.{{@key}} = function (body, options) {
+  options = extend({}, options);
+  options.headers = extendInsensitive({{{stringify (object (keys headers) (pluck headers 'default'))}}}, options.headers);
+
+  return handleRequest(this._client, this._uri, {{{stringify (upperCase method)}}}, body, options);
+};
+{{/each}}
+{{/each}}

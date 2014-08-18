@@ -1,0 +1,70 @@
+#%RAML 0.8
+---
+title: Test API
+version: 1.0
+baseUri: http://example.com
+
+# Awkard root route.
+/:
+  get:
+
+# Test simple route
+/route:
+  get:
+  post:
+  put:
+  patch:
+  delete:
+
+# Test headers
+/headers:
+  /default:
+    get:
+      headers:
+        X-Default-Header:
+          type: string
+          default: Default Value
+
+# Test uri parameters
+/parameters:
+  /single:
+    /{id}:
+      get:
+  /prefix:
+    /one{id}:
+      get:
+    /three{this}{that}{again}:
+      get:
+  /default:
+    /{parameter}:
+      uriParameters:
+        parameter:
+          type: string
+          default: test
+      get:
+
+# Test extensions
+/extensions:
+  /static.json:
+    get:
+  /media-type:
+    /enum{mediaTypeExtension}:
+      uriParameters:
+        mediaTypeExtension:
+          enum: [json, xml]
+      get:
+    /enum-with-period{mediaTypeExtension}:
+      uriParameters:
+        mediaTypeExtension:
+          enum: [.json, .xml]
+      get:
+    /basic{mediaTypeExtension}:
+      get:
+
+# Handle conflicting routes
+/conflicts:
+  /media-type:
+    /route:
+      get:
+  /media-type{mediaTypeExtension}:
+    get:

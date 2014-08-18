@@ -1,0 +1,372 @@
+var isNode   = typeof require === 'function' && typeof exports === 'object';
+var isAmd    = typeof define === 'function' && define.amd;
+var isClient = typeof window === 'object';
+var Promise  = isNode ? require('bluebird') : root.Promise;
+var FormData = isNode ? require('form-data') : root.FormData;
+
+/**
+ * Match various content types.
+ *
+ * @type {RegExp}
+ */
+var JSON_MIME_REGEXP  = /^application\/(?:[\w!#\$%&\*`\-\.\^~]*\+)?json$/i;
+var QUERY_MIME_REGEXP = /^application\/x-www-form-urlencoded$/i;
+var FORM_MIME_REGEXP  = /^multipart\/form-data$/i;
+
+/**
+ * Really basic uri template regexp.
+ *
+ * @type {RegExp}
+ */
+var TEMPLATE_REGEXP = /\{[^\{\}]+\}/g;
+
+/**
+ * Check if an object contains a key.
+ *
+ * @param  {Object}  obj
+ * @param  {String}  key
+ * @return {Boolean}
+ */
+var hasOwnProperty = function (obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+};
+
+/**
+ * Interpolate a template string with object properties.
+ *
+ * @param  {String} string
+ * @param  {Object} interpolate
+ * @return {String}
+ */
+var template = function (string, interpolate, defaults) {
+  defaults    = defaults    || {};
+  interpolate = interpolate || {};
+
+  return string.replace(TEMPLATE_REGEXP, function (match) {
+    var key = match.slice(1, -1);
+
+    if (interpolate[key] != null) {
+      return encodeComponent(interpolate[key]);
+    }
+
+    if (defaults[key] != null) {
+      return encodeComponent(defaults[key]);
+    }
+
+    return '';
+  });
+};
+
+/**
+ * Extend a base object with any number of source objects.
+ *
+ * @param  {Object} destination
+ * @param  {Object} ...source
+ * @return {Object}
+ */
+var extend = function (destination /*, ...source */) {
+  Array.prototype.slice.call(arguments, 1).forEach(function (source) {
+    Object.keys(source || {}).forEach(function (name) {
+      destination[name] = source[name];
+    });
+  });
+
+  return destination;
+};
+
+/**
+ * Extend a base object with any number of source objects using
+ * case-insensitive keys.
+ *
+ * @param  {Object} destination
+ * @param  {Object} ...source
+ * @return {Object}
+ */
+var extendInsensitive = function (destination /*, ...source */) {
+  Array.prototype.slice.call(arguments, 1).forEach(function (source) {
+    Object.keys(source || {}).forEach(function (name) {
+      var key = getInsensitiveKey(destination, name);
+
+      if (key != null) {
+        delete destination[key];
+      }
+
+      destination[name] = source[name];
+    });
+  });
+
+  return destination;
+};
+
+/**
+ * Attempt (and fix) URI component encoding.
+ *
+ * @param  {String} str
+ * @return {String}
+ */
+var encodeComponent = function (str) {
+  if (str == null) {
+    return '';
+  }
+
+  try {
+    return encodeURIComponent(str)
+      .replace(/[!'()]/g, escape)
+      .replace(/\*/g, '%2A');
+  } catch (e) {
+    return '';
+  }
+};
+
+/**
+ * Attempt URI component decoding.
+ *
+ * @param  {String} str
+ * @return {String}
+ */
+var decodeComponent = function (str) {
+  if (str == null) {
+    return '';
+  }
+
+  try {
+    return decodeURIComponent(str);
+  } catch (e) {
+    return '';
+  }
+};
+
+/**
+ * Convert an object into a query string.
+ *
+ * @param  {Object} obj
+ * @return {String}
+ */
+var toQueryString = function (obj, sep, eq) {
+  eq  = eq  || '=';
+  sep = sep || '&';
+
+  if (Object(obj) !== obj) {
+    return String(obj == null ? '' : obj);
+  }
+
+  var params = [];
+
+  {{!-- Iterate over each key and object and generate a query string. --}}
+  Object.keys(obj).forEach(function (key) {
+    var value  = obj[key];
+    var keyStr = encodeComponent(key) + eq;
+
+    if (Array.isArray(value)) {
+      for (var i = 0; i < value.length; i++) {
+        params.push(keyStr + encodeComponent(value[i]));
+      }
+    } else {
+      params.push(keyStr + encodeComponent(value));
+    }
+  });
+
+  return params.join(sep);
+};
+
+/**
+ * Convert a query string into an object.
+ *
+ * @param  {String} qs
+ * @return {Object}
+ */
+var fromQueryString = function (qs, sep, eq) {
+  eq  = eq  || '=';
+  sep = sep || '&';
+  qs  = qs.split(sep);
+
+  var obj     = {};
+  var maxKeys = 1000;
+  var len     = qs.length > maxKeys ? maxKeys : qs.length;
+
+  for (var i = 0; i < len; i++) {
+    var key   = qs[i].replace(/\+/g, '%20');
+    var value = '';
+    var index = key.indexOf(eq);
+
+    if (index !== -1) {
+      value = key.substr(index + 1);
+      key   = key.substr(0, index);
+    }
+
+    key   = decodeComponent(key);
+    value = decodeComponent(value);
+
+    if (!hasOwnProperty(obj, key)) {
+      obj[key] = value;
+    } else if (Array.isArray(obj[key])) {
+      obj[key].push(value);
+    } else {
+      obj[key] = [obj[key], value];
+    }
+  }
+
+  return obj;
+};
+
+/**
+ * Convert an object into a form data instance.
+ *
+ * @param  {Object}   parameters
+ * @return {FormData}
+ */
+var toFormData = function (obj) {
+  if (Object(obj) !== obj) {
+    return null;
+  }
+
+  var form = new FormData();
+
+  Object.keys(obj).forEach(function (name) {
+    form.append(name, obj[name]);
+  });
+
+  return form;
+};
+
+/**
+ * Check whether the object is already a native supported request.
+ *
+ * @param  {*}       object
+ * @return {Boolean}
+ */
+var isHostObject = function (object) {
+  var str = Object.prototype.toString.call(object);
+
+  switch (str) {
+    case '[object File]':
+    case '[object Blob]':
+    case '[object FormData]':
+      return true;
+    default:
+      return false;
+  }
+};
+
+// Handle different object types in node.
+if (isNode) {
+  isHostObject = function (object) {
+    return object instanceof Buffer || object instanceof FormData;
+  };
+}
+
+/**
+ * Find the insensitive key name in an object.
+ *
+ * @param  {Object} obj
+ * @param  {String} name
+ * @return {String}
+ */
+var getInsensitiveKey = function (obj, name) {
+  var result;
+
+  name = name.toLowerCase();
+
+  Object.keys(obj || {}).some(function (key) {
+    if (key.toLowerCase() !== name) {
+      return false;
+    }
+
+    result = key;
+
+    return true;
+  });
+
+  return result;
+};
+
+/**
+ * Find the property on an object using a case-insensitive key name.
+ *
+ * @param  {Object} obj
+ * @param  {String} name
+ * @return {String}
+ */
+var getInsensitiveProperty = function (obj, name) {
+  var key = getInsensitiveKey(obj, name);
+
+  return key == null ? undefined : obj[key];
+};
+
+/**
+ * Return the content type from a header object.
+ *
+ * @param  {Object} headers
+ * @return {String}
+ */
+var getContentType = function (headers) {
+  var type = getInsensitiveProperty(headers, 'content-type');
+
+  return type && String(type).split(';')[0];
+};
+
+/**
+ * Compile the request into a string.
+ *
+ * @param  {*}      body
+ * @param  {Object} headers
+ * @return {String}
+ */
+var toRequestBody = function (body, headers) {
+  // Convert primitives types into strings.
+  if (Object(body) !== body) {
+    return body == null ? null : String(body);
+  }
+
+  // Return known host bodies as normal.
+  if (isHostObject(body)) {
+    return body;
+  }
+
+  var type = getContentType(headers);
+
+  // Set the default mime type to be JSON if none exists.
+  if (!type) {
+    type = headers['content-type'] = 'application/json';
+  }
+
+  // Stringify the body as JSON.
+  if (JSON_MIME_REGEXP.test(type)) {
+    return JSON.stringify(body);
+  }
+
+  // Create a form data instance using the body.
+  if (FORM_MIME_REGEXP.test(type)) {
+    return toFormData(body);
+  }
+
+  // Stringify the body as a query string.
+  if (QUERY_MIME_REGEXP.test(type)) {
+    return toQueryString(body);
+  }
+
+  return body;
+};
+
+/**
+ * Parse the response body into a native JavaScript object.
+ *
+ * @param  {*}      body
+ * @param  {Object} headers
+ * @return {String}
+ */
+var parseResponseBody = function (body, headers) {
+  var type = getContentType(headers);
+
+  // Parse the body as JSON.
+  if (JSON_MIME_REGEXP.test(type)) {
+    return JSON.parse(body);
+  }
+
+  // Parse the body as a query string.
+  if (QUERY_MIME_REGEXP.test(type)) {
+    return fromQueryString(body);
+  }
+
+  return body;
+};

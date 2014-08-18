@@ -1,0 +1,9 @@
+if (isNode) {
+  module.exports = Client;
+} else if (isAmd) {
+  define(function () {
+    return Client;
+  });
+} else {
+  root.{{pascalCase title}} = Client;
+}

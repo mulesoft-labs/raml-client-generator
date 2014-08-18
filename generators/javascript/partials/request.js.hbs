@@ -1,0 +1,253 @@
+/**
+ * Create a consistent cross-platform request constructor.
+ *
+ * @param {Object} options
+ */
+var Request = function (options) {
+  this._options = options;
+
+  // Remove the `Content-Type` header from form data requests. Node's `request`
+  // module supports the `form-data` module for automatically adding headers,
+  // while the browser sets it on `xhr.send` - but only when nothing is set!
+  if (options.body instanceof FormData) {
+    var contentTypeKey = getInsensitiveKey(options.headers, 'content-type');
+
+    if (contentTypeKey != null) {
+      delete options.headers[contentTypeKey];
+    }
+  }
+
+  // If no accept header has been set, we need to override it automatically.
+  // This is needed because Firefox will default to be essentially `html/xml`.
+  if (!getInsensitiveProperty(options.headers, 'accept')) {
+    options.headers.accept = '*/*';
+  }
+};
+
+/**
+ * Lazily resolve the promise.
+ */
+Request.prototype._create = function () {
+  var self = this;
+
+  // Create a new promise internally to return.
+  this._promise = new Promise(function (resolve, reject) {
+    self._handle(resolve, reject);
+  });
+};
+
+/**
+ * Iterate over possibly available promise methods (depends on environment)
+ * and add lazy initialization support.
+ */
+[
+  'then',
+  'bind',
+  'catch',
+  'spread',
+  'otherwise',
+  'map',
+  'reduce',
+  'tap',
+  'thenReturn',
+  'return',
+  'yield',
+  'ensure',
+  'nodeify'
+].filter(function (method) {
+  return Promise.prototype[method];
+}).forEach(function (method) {
+  Request.prototype[method] = function () {
+    if (!this._promise) {
+      this._create();
+    }
+
+    return this._promise[method].apply(this._promise, arguments);
+  };
+});
+
+/**
+ * Node-style callback support.
+
+ * @param  {Function} cb
+ * @return {Request}
+ */
+Request.prototype.exec = function (cb) {
+  this.then(function (value) { cb(null, value); }, cb);
+};
+
+{{!-- Requests are handled differently in each environment. --}}
+if (isNode) {
+  var request = require('req' + 'uest');
+
+  /**
+   * Return options sanitized for the request module.
+   *
+   * @return {Object}
+   */
+  Request.prototype._requestOptions = function () {
+    var options = this._options;
+    var request = {};
+
+    request.uri     = options.uri;
+    request.method  = options.method;
+    request.headers = options.headers;
+
+    // Append the query string directly to the uri for requests.
+    if (options.query) {
+      request.uri += '?' + options.query;
+    }
+
+    // Node `request` module supports form data under a private form property.
+    if (options.body instanceof FormData) {
+      request._form = options.body;
+    } else {
+      request.body = options.body;
+    }
+
+    return request;
+  };
+
+  /**
+   * Sanitize the node response object to a standard format.
+   *
+   * @param  {Object} response
+   * @return {Object}
+   */
+  Request.prototype._sanitize = function (response) {
+    var headers = extend({}, response.headers);
+    var body    = parseResponseBody(response.body, headers);
+
+    return {
+      raw:     response,
+      body:    body,
+      status:  response.statusCode,
+      headers: headers
+    };
+  };
+
+  /**
+   * Handle the request in node using the `request` library.
+   *
+   * @param {Function} resolve
+   * @param {Function} reject
+   */
+  Request.prototype._handle = function (resolve, reject) {
+    var self = this;
+
+    return request(this._requestOptions(), function (err, response) {
+      if (err) {
+        return reject(err);
+      }
+
+      try {
+        return resolve(self._sanitize(response));
+      } catch (e) {
+        return reject(e);
+      }
+    });
+  };
+
+  /**
+   * Expose the current request stream.
+   *
+   * @return {Object}
+   */
+  Request.prototype.stream = function () {
+    return request(this._requestOptions());
+  };
+
+  /**
+   * Pipe the current response into another stream.
+   *
+   * @param  {Object} stream
+   * @return {Object}
+   */
+  Request.prototype.pipe = function (stream) {
+    return this.stream().pipe(stream);
+  };
+} else {
+  /**
+   * Sanitize the XHR response object to a standard format.
+   *
+   * @param  {Object} xhr
+   * @return {Object}
+   */
+  Request.prototype._sanitize = (function () {
+    var getAllReponseHeaders = function (xhr) {
+      var headers = {};
+
+      // Split all header lines and iterate.
+      xhr.getAllResponseHeaders().split('\n').forEach(function (header) {
+        var index = header.indexOf(':');
+
+        if (index === -1) {
+          return;
+        }
+
+        var name  = header.substr(0, index).toLowerCase();
+        var value = header.substr(index + 1).trim();
+
+        headers[name] = value;
+      });
+
+      return headers;
+    };
+
+    return function (xhr) {
+      var headers = getAllReponseHeaders(xhr);
+      var body    = parseResponseBody(xhr.responseText, headers);
+
+      return {
+        raw:     xhr,
+        body:    body,
+        status:  xhr.status,
+        headers: headers
+      };
+    };
+  })();
+
+  /**
+   * Handle the request in browsers using `XMLHttpRequest`.
+   *
+   * @param {Function} resolve
+   * @param {Function} reject
+   */
+  Request.prototype._handle = function (resolve, reject) {
+    var self    = this;
+    var uri     = this._options.uri;
+    var xhr     = new root.XMLHttpRequest();
+    var method  = this._options.method;
+    var headers = this._options.headers || {};
+
+    // Append the query string directly to the uri when available.
+    if (this._options.query) {
+      uri += '?' + this._options.query;
+    }
+
+    // Open the request to the specified url and method.
+    xhr.open(method, uri);
+
+    // When the request has loaded, attempt to sanitize the data.
+    xhr.onload = function() {
+      try {
+        return resolve(self._sanitize(xhr));
+      } catch (e) {
+        return reject(e);
+      }
+    };
+
+    // Catch request errors.
+    xhr.onerror = xhr.onabort = function () {
+      return reject(new Error(xhr.statusText || 'XHR aborted'));
+    };
+
+    // Set all request headers.
+    Object.keys(headers).forEach(function (header) {
+      xhr.setRequestHeader(header, headers[header]);
+    });
+
+    // Make the request with the body.
+    xhr.send(this._options.body);
+  };
+}

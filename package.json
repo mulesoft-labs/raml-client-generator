@@ -1,0 +1,64 @@
+{
+  "name": "raml-client-generator",
+  "version": "0.0.0",
+  "description": "Template-driven generator of clients for APIs described by RAML",
+  "main": "generators/index.js",
+  "scripts": {
+    "test": "gulp test",
+    "test-travis": "gulp test:javascript"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mulesoft-labs/raml-client-generator.git"
+  },
+  "bin": {
+    "raml-client": "bin/raml-client.js"
+  },
+  "keywords": [
+    "raml",
+    "client",
+    "generator",
+    "javascript"
+  ],
+  "author": "MuleSoft, Inc.",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/mulesoft-labs/raml-client-generator/issues"
+  },
+  "homepage": "https://github.com/mulesoft-labs/raml-client-generator",
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "concat-stream": "^1.4.6",
+    "gulp": "^3.8.6",
+    "gulp-jshint": "^1.8.4",
+    "karma": "^0.12.19",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-coverage": "^0.2.5",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-mocha": "^0.1.6",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sinon-chai": "^0.2.0",
+    "mocha": "^1.21.3",
+    "nock": "^0.42.2",
+    "require-dir": "^0.1.0",
+    "stream-equal": "^0.1.5"
+  },
+  "dependencies": {
+    "bluebird": "^2.2.2",
+    "camel-case": "^0.1.0",
+    "constant-case": "^0.1.0",
+    "dot-case": "^0.1.0",
+    "handlebars": "^2.0.0-alpha.4",
+    "indent-string": "^0.1.3",
+    "javascript-stringify": "0.0.2",
+    "lodash": "^2.4.1",
+    "lower-case": "0.0.1",
+    "mkdirp": "^0.5.0",
+    "param-case": "^0.1.0",
+    "pascal-case": "^0.1.1",
+    "raml-parser": "^0.8.7",
+    "snake-case": "^0.1.1",
+    "upper-case": "0.0.1",
+    "yargs": "^1.3.1"
+  }
+}
