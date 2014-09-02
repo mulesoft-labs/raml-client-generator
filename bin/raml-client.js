@@ -45,8 +45,8 @@ var argv = require('yargs')
  * @type {Object}
  */
 var options = {
-  entry: base(argv.entry || argv._[0]),
-  output: base(argv.output),
+  entry:    base(argv.entry || argv._[0]),
+  output:   base(argv.output),
   language: argv.language.toLowerCase()
 };
 
@@ -63,8 +63,8 @@ Promise.resolve(options)
   .then(function (ast) {
     return generators[options.language](ast, options);
   })
-  .then(function (content) {
-    return objectToFs(options.output, content.files);
+  .then(function (output) {
+    return objectToFs(options.output, output.files);
   })
   .then(function () {
     process.exit(0);
