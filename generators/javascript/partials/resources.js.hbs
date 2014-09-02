@@ -12,8 +12,11 @@ var handleRequest = function (client, uri, method, body, options) {
   // Extend the base client options with passed in options.
   options = extend({}, client.options, options);
 
+  // Generate the base uri dynamically from the client options.
+  var baseUri = template(options.baseUri, options.baseUriParameters);
+
   // Set options that should never be overriden.
-  options.uri    = template(options.baseUri.replace(/\/+$/, ''), options.baseUriParameters) + uri;
+  options.uri    = baseUri.replace(/\/$/, '') + uri;
   options.method = method;
 
   if (method === 'GET' || method === 'HEAD') {
@@ -58,4 +61,15 @@ var {{pascalCase id}} = function (uri, client) {
   return handleRequest(this._client, this._uri, {{{stringify (upperCase method)}}}, body, options);
 };
 {{/each}}
+{{/each}}
+
+var CustomResource = function (uri, client) {
+  this._uri    = uri;
+  this._client = client;
+};
+
+{{#each supportedMethods}}
+CustomResource.prototype.{{camelCase this}} = function (body, options) {
+  return handleRequest(this._client, this._uri, {{{stringify (upperCase this)}}}, body, options);
+};
 {{/each}}

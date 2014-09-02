@@ -8,6 +8,7 @@ var Client = function (options) {
     baseUriParameters: {{{stringify (object (keys baseUriParameters) (pluck baseUriParameters 'default'))}}}
   }, options);
 
+  this.resource  = customRequest(this);
   this.resources = new {{pascalCase resources.id}}('', this);
 };
 

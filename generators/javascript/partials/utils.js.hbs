@@ -370,3 +370,17 @@ var parseResponseBody = function (body, headers) {
 
   return body;
 };
+
+/**
+ * Create a custom request function for the client.
+ *
+ * @param  {Object}   client
+ * @return {Function}
+ */
+var customRequest = function (client) {
+  return function (route, parameters) {
+    var uri = '/' + template(route, parameters).replace(/^\//, '');
+
+    return new CustomResource(uri, client);
+  };
+};

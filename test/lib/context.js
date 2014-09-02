@@ -26,6 +26,7 @@ describe('context', function () {
       'resources',
       'allMethods',
       'allResources',
+      'supportedMethods'
     ]);
 
     expect(output.id).to.be.a('string');

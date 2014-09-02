@@ -20,7 +20,7 @@ var Request = function (options) {
   // If no accept header has been set, we need to override it automatically.
   // This is needed because Firefox will default to be essentially `html/xml`.
   if (!getInsensitiveProperty(options.headers, 'accept')) {
-    options.headers.accept = '*/*';
+    (options.headers = options.headers || {}).accept = '*/*';
   }
 };
 
