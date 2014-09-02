@@ -1,9 +1,9 @@
 if (isNode) {
-  module.exports = Client;
+  module.exports = {{pascalCase id}};
 } else if (isAmd) {
   define(function () {
-    return Client;
+    return {{pascalCase id}};
   });
 } else {
-  root.{{pascalCase title}} = Client;
+  root.{{pascalCase title}} = {{pascalCase id}};
 }

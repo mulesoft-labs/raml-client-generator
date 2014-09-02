@@ -2,7 +2,7 @@
  * The base api client instance. Allows multiple instances to be created
  * with different configuration options.
  */
-var Client = function (options) {
+var {{pascalCase id}} = function (options) {
   this.options = extend({
     baseUri: {{{stringify baseUri}}},
     baseUriParameters: {{{stringify (object (keys baseUriParameters) (pluck baseUriParameters 'default'))}}}
@@ -18,7 +18,7 @@ var Client = function (options) {
  * @param  {Object} options
  * @return {Object}
  */
-Client.prototype.request = function (options) {
+{{pascalCase id}}.prototype.request = function (options) {
   return new Request(options);
 };
 
@@ -28,11 +28,11 @@ Client.prototype.request = function (options) {
  * @param  {Object}   parameters
  * @return {FormData}
  */
-Client.prototype.form = function (parameters) {
+{{pascalCase id}}.prototype.form = function (parameters) {
   return toFormData(parameters);
 };
 
 {{!-- Externalize some reusable properties. --}}
-Client.prototype.version  = {{{stringify version}}};
-Client.prototype.Request  = Request;
-Client.prototype.FormData = FormData;
+{{pascalCase id}}.prototype.version  = {{{stringify version}}};
+{{pascalCase id}}.prototype.Request  = Request;
+{{pascalCase id}}.prototype.FormData = FormData;
