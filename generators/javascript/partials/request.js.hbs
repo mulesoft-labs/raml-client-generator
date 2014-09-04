@@ -215,14 +215,15 @@ if (isNode) {
    */
   Request.prototype._handle = function (resolve, reject) {
     var self    = this;
-    var uri     = this._options.uri;
+    var options = this._options;
+    var uri     = options.uri;
     var xhr     = new root.XMLHttpRequest();
-    var method  = this._options.method;
-    var headers = this._options.headers || {};
+    var method  = options.method;
+    var headers = options.headers || {};
 
     // Append the query string directly to the uri when available.
-    if (this._options.query) {
-      uri += '?' + this._options.query;
+    if (options.query) {
+      uri += '?' + options.query;
     }
 
     // Open the request to the specified url and method.
@@ -248,6 +249,6 @@ if (isNode) {
     });
 
     // Make the request with the body.
-    xhr.send(this._options.body);
+    xhr.send(options.body);
   };
 }
