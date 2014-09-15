@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mulesoft-labs/raml-client-generator.git"
+    "url": "git://github.com/mulesoft/raml-client-generator.git"
   },
   "bin": {
     "raml-client": "bin/raml-client.js"
@@ -23,9 +23,9 @@
   "author": "MuleSoft, Inc.",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/mulesoft-labs/raml-client-generator/issues"
+    "url": "https://github.com/mulesoft/raml-client-generator/issues"
   },
-  "homepage": "https://github.com/mulesoft-labs/raml-client-generator",
+  "homepage": "https://github.com/mulesoft/raml-client-generator",
   "devDependencies": {
     "chai": "^1.9.1",
     "concat-stream": "^1.4.6",
