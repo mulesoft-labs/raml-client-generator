@@ -5,7 +5,7 @@
   "main": "generators/index.js",
   "scripts": {
     "test": "gulp test",
-    "test-travis": "gulp test:javascript"
+    "test-ci": "gulp test --ci"
   },
   "repository": {
     "type": "git",
@@ -54,6 +54,7 @@
     "lodash": "^2.4.1",
     "lower-case": "^1.0.2",
     "methods": "^1.1.0",
+    "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",
     "param-case": "^1.0.1",
     "pascal-case": "^1.0.0",

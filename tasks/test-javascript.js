@@ -2,6 +2,7 @@ var gulp  = require('gulp');
 var path  = require('path');
 var karma = require('karma').server;
 var spawn = require('child_process').spawn;
+var argv  = require('minimist')(process.argv.slice(2));
 
 /**
  * Path to the mocha executable.
@@ -32,10 +33,17 @@ gulp.task('test:javascript:node', [
 gulp.task('test:javascript:browser', [
   'generate:javascript'
 ], function (done) {
-  return karma.start({
+  var opts = {
     singleRun: true,
     configFile: path.join(__dirname, 'support', 'karma.conf.js')
-  }, done);
+  };
+
+  // If continuous integration is enabled, test only a single browser.
+  if (argv.ci) {
+    opts.browsers = ['PhantomJS'];
+  }
+
+  return karma.start(opts, done);
 });
 
 /**

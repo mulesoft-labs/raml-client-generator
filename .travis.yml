@@ -8,6 +8,6 @@ notifications:
 node_js:
   - "0.10"
 
-script: "npm run-script test-travis"
+script: "npm run-script test-ci"
 
 after_script: "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
