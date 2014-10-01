@@ -1,0 +1,128 @@
+# {{title}}
+
+Node and browser module for interacting with [{{title}}]({{baseUri}}).
+
+## Installation
+
+```
+npm install {{paramCase title}} --save
+```
+
+## Usage
+
+```javascript
+var {{pascalCase title}} = require('{{paramCase title}}');
+
+var client = new {{pascalCase title}}();
+```
+
+### Resources
+
+{{#each allResources}}
+{{#each methods}}
+#### client.{{{requestSnippet this}}}
+
+{{{trim description}}}
+
+{{#if ../uriParameters}}
+##### Method Parameters
+
+{{{parametersSnippet ../../uriParameters}}}
+{{/if}}
+
+{{#if (values queryParameters)}}
+##### Query Parameters
+
+```javascript
+{{#if (equal method 'get')}}
+{{key}}({ ... });
+{{else}}
+{{key}}(null, { query: { ... } });
+{{/if}}
+```
+
+{{{parametersSnippet queryParameters}}}
+{{/if}}
+
+{{#if (values headers)}}
+##### Headers
+
+```javascript
+{{key}}(null, {
+  headers {
+    'X-Example-Header': 'Example value'
+  }
+});
+```
+
+{{{parametersSnippet headers}}}
+{{/if}}
+
+{{#if (values body)}}
+##### Body
+
+{{#each body}}
+**{{@key}}**
+
+{{#if schema}}
+```
+{{{schema}}}
+```
+{{/if}}
+
+{{#if formParameters}}
+{{{json formParameters 2}}}
+{{/if}}
+
+{{/each}}
+{{/if}}
+
+{{/each}}
+{{/each}}
+
+### Custom Resources
+
+You can make requests to a custom path in the API but using `#resource(path)`.
+
+```javascript
+client.resource('/example/path').get();
+```
+
+### Options
+
+You can set options when you initialize a client or at any time with the `options` property. You may also override options for a single request by passing an object as the second argument of any request method. For example:
+
+```javascript
+var client = new {{pascalCase title}}({ ... });
+
+client.options = { ... };
+
+client.resource('/').get(null, {
+  baseUri: 'http://example.com',
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+```
+
+#### Base URI
+
+You can override the base URI by setting the `baseUri` property, or initializing a client with a base URI. For example:
+
+```javascript
+new {{pascalCase title}}({
+  baseUri: 'https://example.com'
+});
+```
+
+#### Base URI Parameters
+
+If the base URI has parameters inline, you can set them by updating the `baseUriParameters` property. For example:
+
+```javascript
+client.options.baseUriParameters.version = '{{#if version}}{{version}}{{else}}v3{{/if}}';
+```
+
+## License
+
+Apache 2.0

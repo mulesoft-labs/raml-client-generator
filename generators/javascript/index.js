@@ -22,6 +22,8 @@ module.exports = generator({
     resources: require('./partials/resources.js.hbs')
   },
   helpers: {
-    stringify: require('javascript-stringify')
+    stringify:         require('javascript-stringify'),
+    requestSnippet:    require('./helpers/request-snippet'),
+    parametersSnippet: require('./helpers/parameters-snippet')
   }
 });
