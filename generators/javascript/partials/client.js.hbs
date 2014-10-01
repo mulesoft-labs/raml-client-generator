@@ -28,11 +28,11 @@ var {{pascalCase id}} = function (options) {
  * @param  {Object}   parameters
  * @return {FormData}
  */
-{{pascalCase id}}.prototype.form = function (parameters) {
+{{pascalCase id}}.prototype.form = {{pascalCase id}}.form = function (parameters) {
   return toFormData(parameters);
 };
 
 {{!-- Externalize some reusable properties. --}}
-{{pascalCase id}}.prototype.version  = {{{stringify version}}};
-{{pascalCase id}}.prototype.Request  = Request;
-{{pascalCase id}}.prototype.FormData = FormData;
+{{pascalCase id}}.version  = {{{stringify version}}};
+{{pascalCase id}}.Request  = Request;
+{{pascalCase id}}.FormData = FormData;
