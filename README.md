@@ -28,27 +28,27 @@ To maintain consistency across clients in multiple languages, certain behaviours
 
 #### Files
 
-Every implementation can contain as many files as required. It is recommended to have a minimum of a `README.md`, package definition and the implementation logic in separate files.
+Every implementation can contain as many files as required. It is recommended to have a minimum of a `README.md`, package definition and the implementation logic in several separate files.
 
 #### Client
 
-The main client should be able to create multiple instances with shared code.
+The main client function should be able to create multiple instances.
 
 #### Resource DSL
 
-The core generator instance maintains a consistent DSL for all resources. Just generate the relevant classes based on the generator AST. The aim is to generate a readable and maintainable DSL based on the resource path. For example, `/route` becomes `.route` in JavaScript.
+The core generator function maintains a consistent DSL for all resources. Just generate the relevant classes based on the generator AST. The aim is to generate a readable and maintainable DSL based on the resource path. For example, `/route` becomes `.route` in JavaScript.
 
-The resources DSL should be nested under the `resources` property of the main client.
+The resources DSL should be nested under the `resources` property of a client instance.
 
 #### Resource methods
 
-Every resource method should be a separate method at the end of the respective DSL chain. The actual behaviour of this method may alter between implementations. In JavaScript, it returns a promise interface with stream support in node.
+Every available resource verb should be a separate method at the end of the respective DSL chain. The actual behaviour of this method may alter between implementations. In JavaScript, it returns a promise.
 
-GET and HEAD requests should have a shorthand to set the query parameters, while every other method should have a shorthand to set the body.
+GET and HEAD requests should have a shorthand to set the query parameters, while all other method should have a shorthand to set the body. The other option passed into resource methods should be a map of options such as `query`, `headers`, `body`, `baseUri` and `baseUriParameters`.
 
 #### Base URI and Parameters
 
-The base uri and base uri parameters should be overridable in a single client instance.
+The base uri and base uri parameters should be overridable in a client instance.
 
 #### Requests
 
@@ -67,7 +67,7 @@ Responses should come back in a standard format - `status`, `headers`, `body` an
 * **body** - The parsed body response represented as a native type.
 * **raw** - The original raw response in the target language.
 
-The response body must be parsed according to the response `Content-Type` header. If the header is `application/json`, parse as JSON. If the header is `application/x-www-form-urlencoded`, parse as a url encoded form. Otherwise, it should be a string.
+The response body must be parsed according to the response `Content-Type` header. If the header is `application/json`, it should be parsed automatically from JSON. If the header is `application/x-www-form-urlencoded`, parse as a url encoded form. Otherwise, it should be a string.
 
 ## License
 
