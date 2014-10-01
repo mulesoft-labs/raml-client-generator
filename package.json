@@ -12,7 +12,7 @@
     "url": "git://github.com/mulesoft/raml-client-generator.git"
   },
   "bin": {
-    "raml-client": "bin/raml-client.js"
+    "raml-to-client": "bin/raml-client.js"
   },
   "keywords": [
     "raml",

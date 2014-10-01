@@ -6,7 +6,7 @@ var Promise    = require('bluebird');
 var resolve    = require('path').resolve;
 var ramlParser = require('raml-parser');
 var pkg        = require('../package');
-var generators = require('../generators');
+var languages  = require('../languages');
 var objectToFs = require('../lib/util/object-to-fs');
 var cwd        = process.cwd();
 
@@ -55,13 +55,13 @@ var options = {
  */
 Promise.resolve(options)
   .tap(function (options) {
-    assert(generators.hasOwnProperty(options.language), 'Unsupported language');
+    assert(languages.hasOwnProperty(options.language), 'Unsupported language');
   })
   .then(function (options) {
     return ramlParser.loadFile(options.entry);
   })
   .then(function (ast) {
-    return generators[options.language](ast, options);
+    return languages[options.language](ast, options);
   })
   .then(function (output) {
     return objectToFs(options.output, output.files);
