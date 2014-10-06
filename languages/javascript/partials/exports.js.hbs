@@ -1,9 +1,0 @@
-if (isNode) {
-  module.exports = {{pascalCase id}};
-} else if (isAmd) {
-  define(function () {
-    return {{pascalCase id}};
-  });
-} else {
-  root.{{pascalCase title}} = {{pascalCase id}};
-}

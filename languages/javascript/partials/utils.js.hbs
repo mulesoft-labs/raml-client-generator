@@ -1,8 +1,7 @@
-var isNode   = typeof require === 'function' && typeof exports === 'object';
-var isAmd    = typeof define === 'function' && define.amd;
-var isClient = typeof window === 'object';
-var Promise  = isNode ? require('b' + 'luebird') : root.Promise;
-var FormData = isNode ? require('f' + 'orm-data') : root.FormData;
+var isNode    = typeof require === 'function' && typeof exports === 'object';
+var isBrowser = typeof window === 'object';
+var Promise   = isBrowser ? window.Promise : require('b' + 'luebird');
+var FormData  = isBrowser ? window.FormData : require('f' + 'orm-data');
 
 /**
  * Match various content types.
