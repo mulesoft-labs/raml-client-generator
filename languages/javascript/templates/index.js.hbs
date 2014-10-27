@@ -1,18 +1,20 @@
 (function (root, client) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
-    define(['ClientOAuth2'], client);
+    define({{{dependencies this 'amd'}}}, client);
   } else if (typeof exports === 'object') {
     // Node. Does not work with strict CommonJS, but only CommonJS-like
     // environments that support `module.exports`, like Node.
-    module.exports = client(require('client-oauth2'));
+    module.exports = client({{{dependencies this 'node'}}});
   } else {
     // Browser globals (root is window).
-    root.{{pascalCase title}} = client(root.ClientOAuth2);
+    root.{{pascalCase title}} = client({{{dependencies this 'browser'}}});
   }
-})(this, function (ClientOAuth2) {
+})(this, function ({{{dependencies this}}}) {
 {{#indent 2}}
 {{>utils}}
+
+{{>auth}}
 
 {{>request}}
 

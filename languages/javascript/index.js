@@ -15,6 +15,7 @@ module.exports = generator({
     variable: require('camel-case')
   },
   partials: {
+    auth:      require('./partials/auth.js.hbs'),
     utils:     require('./partials/utils.js.hbs'),
     client:    require('./partials/client.js.hbs'),
     request:   require('./partials/request.js.hbs'),
@@ -22,6 +23,7 @@ module.exports = generator({
   },
   helpers: {
     stringify:         require('javascript-stringify'),
+    dependencies:      require('./helpers/dependencies'),
     requestSnippet:    require('./helpers/request-snippet'),
     parametersSnippet: require('./helpers/parameters-snippet')
   }

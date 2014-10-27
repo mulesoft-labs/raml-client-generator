@@ -17,18 +17,6 @@ describe('context', function () {
 
     var output = context(ast, spec);
 
-    expect(output).to.have.keys([
-      'id',
-      'title',
-      'version',
-      'baseUri',
-      'baseUriParameters',
-      'resources',
-      'allMethods',
-      'allResources',
-      'supportedMethods'
-    ]);
-
     expect(output.id).to.be.a('string');
     expect(output.title).to.equal('My API');
     expect(output.version).to.equal('v1.1.0');

@@ -36,8 +36,16 @@ module.exports = function (config) {
      * @type {Array}
      */
     files: [
-      'test/clients/javascript/vendor/*.js',
-      'test/clients/javascript/.tmp/*/index.js',
+      // Third party dependencies.
+      'test/clients/javascript/.tmp/test/node_modules/client-oauth2/client-oauth2.js',
+
+      // Polyfill promise support.
+      'test/clients/javascript/vendor/promise.js',
+
+      // Include the test client.
+      'test/clients/javascript/.tmp/test/index.js',
+
+      // Include all the test files.
       'test/clients/javascript/browser/**/*.js'
     ],
 

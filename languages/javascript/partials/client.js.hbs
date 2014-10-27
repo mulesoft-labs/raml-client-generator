@@ -32,7 +32,17 @@ Client.prototype.form = Client.form = function (parameters) {
   return toFormData(parameters);
 };
 
-{{!-- Externalize some reusable properties. --}}
-Client.version  = {{{stringify version}}};
+/**
+ * Current version of the API.
+ */
+Client.prototype.version  = {{{stringify version}}};
+
+{{#if security.[OAuth 2.0]}}
+/**
+ * Enable OAuth 2.0 support.
+ */
+Client.OAuth2 = OAuth2;
+{{/if}}
+
 Client.Request  = Request;
 Client.FormData = FormData;
