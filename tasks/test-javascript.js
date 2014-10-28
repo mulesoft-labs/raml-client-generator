@@ -24,7 +24,7 @@ gulp.task('test:javascript:node', [
   testProcess.stdout.pipe(process.stdout);
   testProcess.stderr.pipe(process.stderr);
 
-  return testProcess;
+  return testProcess.stdout;
 });
 
 /**
