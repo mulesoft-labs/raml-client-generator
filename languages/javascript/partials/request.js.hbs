@@ -174,7 +174,7 @@ if (isNode) {
    * @return {Object}
    */
   Request.prototype._sanitize = (function () {
-    var getAllReponseHeaders = function (xhr) {
+    var getAllResponseHeaders = function (xhr) {
       var headers = {};
 
       // Split all header lines and iterate.
@@ -195,7 +195,7 @@ if (isNode) {
     };
 
     return function (xhr) {
-      var headers = getAllReponseHeaders(xhr);
+      var headers = getAllResponseHeaders(xhr);
       var body    = parseResponseBody(xhr.responseText, headers);
 
       return {
