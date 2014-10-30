@@ -26,9 +26,7 @@ module.exports = function (config) {
      *
      * @type {Object}
      */
-    preprocessors: {
-      'test/clients/javascript/{.tmp,browser}/**/*.js': ['coverage']
-    },
+    preprocessors: {},
 
     /**
      * List of files and patterns to load in the browser.
@@ -62,7 +60,7 @@ module.exports = function (config) {
      *
      * @type {Array}
      */
-    reporters: ['progress', 'coverage'],
+    reporters: ['progress'],
 
     /**
      * Web server port number.
