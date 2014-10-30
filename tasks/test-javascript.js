@@ -13,6 +13,7 @@ var MOCHA_PATH = path.join(__dirname, '../node_modules/mocha/bin/_mocha');
  * Test the JavaScript clients in node.
  */
 gulp.task('test:javascript:node', [
+  'server',
   'generate:javascript'
 ], function () {
   var testProcess = spawn(MOCHA_PATH, [
@@ -31,6 +32,7 @@ gulp.task('test:javascript:node', [
  * Test the JavaScript clients in the browser.
  */
 gulp.task('test:javascript:browser', [
+  'server',
   'generate:javascript'
 ], function (done) {
   var opts = {

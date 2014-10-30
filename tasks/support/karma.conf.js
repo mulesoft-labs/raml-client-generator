@@ -35,13 +35,13 @@ module.exports = function (config) {
      */
     files: [
       // Third party dependencies.
-      'test/clients/javascript/.tmp/test/node_modules/client-oauth2/client-oauth2.js',
+      'test/clients/javascript/.tmp/example/node_modules/client-oauth2/client-oauth2.js',
 
       // Polyfill promise support.
       'test/clients/javascript/vendor/promise.js',
 
       // Include the test client.
-      'test/clients/javascript/.tmp/test/index.js',
+      'test/clients/javascript/.tmp/example/index.js',
 
       // Include all the test files.
       'test/clients/javascript/browser/**/*.js'

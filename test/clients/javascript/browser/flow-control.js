@@ -1,42 +1,27 @@
 describe('flow control', function () {
-  var client = new TestApi();
+  var client = new ExampleApi();
 
   /**
-   * Array of base "/route" methods.
+   * Array of test methods.
    *
    * @type {Array}
    */
-  var METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'];
+  var METHODS = ['get', 'post', 'put', 'patch', 'delete'];
 
   describe('promise methods', function () {
-    var server;
-
-    before(function () {
-      server = sinon.fakeServer.create();
-
-      server.autoRespond = true;
-
-      METHODS.forEach(function (method) {
-        server.respondWith(method, 'http://example.com/route', 'Hello world!');
-      });
-    });
-
-    after(function () {
-      server.restore();
-    });
-
-    var expectResponse = function (response) {
-      expect(response.body).to.equal('Hello world!');
+    function validateResponse (response) {
+      expect(response.body).to.equal('Hello World!');
       expect(response.status).to.equal(200);
-      expect(response.headers).to.deep.equal({});
-    };
+      expect(response.headers).to.be.an('object');
+      expect(response.headers['content-type']).to.match(/^text\/html/i);
+    }
 
     METHODS.forEach(function (method) {
-      describe(method, function () {
+      describe('#' + method, function () {
         describe('#then', function () {
           it('should resolve', function () {
-            return client.resources.route[method.toLowerCase()]()
-              .then(expectResponse);
+            return client.resources.hello[method]()
+              .then(validateResponse);
           });
         });
       });
@@ -44,48 +29,22 @@ describe('flow control', function () {
   });
 
   describe('reuse request', function () {
-    var count;
-    var server;
-
-    beforeEach(function () {
-      count  = 0;
-      server = sinon.fakeServer.create();
-
-      server.autoRespond = true;
-
-      server.respondWith('GET', 'http://example.com/route', function () {
-        return count++;
-      });
-    });
-
-    afterEach(function () {
-      server.restore();
-    });
-
     it('should reuse the promise', function () {
-      var request = client.resources.route.get();
+      var request = client.resources.hello.get();
 
       return request.then(function (response) {
-        expect(count).to.equal(1);
-
-        return request.then(function () {
-          expect(count).to.equal(1);
-
-          return request.then(function () {
-            expect(count).to.equal(1);
-          });
+        return request.then(function (response2) {
+          expect(response).to.equal(response2);
         });
       });
     });
 
     it('should reuse for exec', function (done) {
-      var request = client.resources.route.get();
+      var request = client.resources.hello.get();
 
       return request.then(function (response) {
-        expect(count).to.equal(1);
-
-        return request.exec(function (err, response) {
-          expect(count).to.equal(1);
+        return request.exec(function (err, response2) {
+          expect(response).to.equal(response2);
 
           return done(err);
         });
@@ -94,63 +53,34 @@ describe('flow control', function () {
   });
 
   describe('Promise#all', function () {
-    var server;
-
-    before(function () {
-      server = sinon.fakeServer.create();
-
-      server.autoRespond = true;
-
-      server.respondWith('GET', 'http://example.com/route', 'GET works!');
-      server.respondWith('POST', 'http://example.com/route', 'POST works!');
-    });
-
-    after(function () {
-      server.restore();
-    });
-
     it('should resolve', function () {
       return Promise
         .all([
-          client.resources.route.get(),
-          client.resources.route.post()
+          client.resources.hello.get(),
+          client.resources.hello.post()
         ])
         .then(function (requests) {
           var get  = requests[0];
           var post = requests[1];
 
-          expect(get.body).to.equal('GET works!');
+          expect(get.body).to.equal('Hello World!');
           expect(get.status).to.equal(200);
-          expect(get.headers).to.deep.equal({});
+          expect(get.headers).to.be.an('object');
 
-          expect(post.body).to.equal('POST works!');
+          expect(post.body).to.equal('Hello World!');
           expect(post.status).to.equal(200);
-          expect(post.headers).to.deep.equal({});
+          expect(post.headers).to.be.an('object');
         });
     });
   });
 
   describe('#exec', function () {
-    var server;
-
-    before(function () {
-      server = sinon.fakeServer.create();
-
-      server.autoRespond = true;
-
-      server.respondWith('GET', 'http://example.com/route', 'Exec works!');
-    });
-
-    after(function () {
-      server.restore();
-    });
-
     it('should callback', function (done) {
-      client.resources.route.get()
+      client.resources.hello.get()
         .exec(function (err, response) {
-          expect(response.body).to.equal('Exec works!');
+          expect(response.body).to.equal('Hello World!');
           expect(response.status).to.equal(200);
-          expect(response.headers).to.deep.equal({});
+          expect(response.headers).to.be.an('object');
 
           return done(err);
         });

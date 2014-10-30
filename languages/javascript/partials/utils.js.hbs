@@ -355,6 +355,11 @@ var toRequestBody = function (body, headers) {
  * @return {String}
  */
 var parseResponseBody = function (body, headers) {
+  // Immediately return `null` for empty responses.
+  if (body === '') {
+    return null;
+  }
+
   var type = getContentType(headers);
 
   // Parse the body as JSON.

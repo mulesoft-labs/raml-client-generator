@@ -1,150 +1,107 @@
-var nock    = require('nock');
-var expect  = require('chai').expect;
-var TestApi = require('../.tmp/test');
+var nock       = require('nock');
+var expect     = require('chai').expect;
+var ExampleApi = require('../.tmp/example');
 
 describe('resource chain', function () {
-  var client = new TestApi();
+  var client = new ExampleApi();
 
-  var expectResponse = function (response) {
+  function validateResponse (response) {
     expect(response.body).to.equal('Success');
     expect(response.status).to.equal(200);
-  };
+  }
 
   describe('root resource', function () {
-    beforeEach(function () {
-      nock('http://example.com')
-        .get('/')
-        .reply(200, 'Success');
-    });
-
     it('should be supported', function () {
-      return client.resources.get().then(expectResponse);
+      return client.resources.get().then(validateResponse);
     });
   });
 
-  describe('uri parameter only', function () {
-    beforeEach(function () {
-      nock('http://example.com')
-        .get('/parameters/single/123')
-        .reply(200, 'Success');
-    });
-
+  describe('uri parameter', function () {
     it('should dynamically generate the resource chain', function () {
-      return client.resources.parameters.single.id(123).get()
-        .then(expectResponse);
+      return client.resources.bounce.parameter.variable(123).get()
+        .then(function (res) {
+          expect(res.body).to.equal('123');
+          expect(res.status).to.equal(200);
+        });
     });
   });
 
   describe('null uri parameter', function () {
-    beforeEach(function () {
-      nock('http://example.com')
-        .get('/parameters/single/')
-        .reply(200, 'Success');
-    });
-
     it('should output null values as an empty string', function () {
-      return client.resources.parameters.single.id(null).get()
-        .then(expectResponse);
+      return client.resources.bounce.parameter.variable(null).get()
+        .then(function (res) {
+          expect(res.body).to.equal(null);
+          expect(res.status).to.equal(200);
+        });
     });
   });
 
   describe('default uri parameter', function () {
-    beforeEach(function () {
-      nock('http://example.com')
-        .get('/parameters/default/test')
-        .reply(200, 'Success');
-    });
-
     it('should use the default value when null', function () {
-      return client.resources.parameters.default.parameter(null).get()
-        .then(expectResponse);
+      return client.resources.defaults.parameter.variable(null).get()
+        .then(function (res) {
+          expect(res.body).to.equal('default');
+          expect(res.status).to.equal(200);
+        });
     });
   });
 
   describe('prefixed uri parameter', function () {
-    describe('single parameter', function () {
-      beforeEach(function () {
-        nock('http://example.com')
-          .get('/parameters/prefix/one123')
-          .reply(200, 'Success');
-      });
+    function validateResponse (res) {
+      expect(res.body).to.equal('123');
+      expect(res.status).to.equal(200);
+    }
 
+    describe('single parameter', function () {
       it('should support arguments', function () {
         return client.resources.parameters.prefix.one(123).get()
-          .then(expectResponse);
+          .then(validateResponse);
       });
 
       it('should not support more arguments than defined', function () {
         return client.resources.parameters.prefix.one(123, 456).get()
-          .then(expectResponse);
+          .then(validateResponse);
       });
     });
 
     describe('multiple parameters', function () {
-      beforeEach(function () {
-        nock('http://example.com')
-          .get('/parameters/prefix/three123')
-          .reply(200, 'Success');
-      });
-
       it('should dynamically generate the resource chain', function () {
         return client.resources.parameters.prefix.three(1, 2, 3).get()
-          .then(expectResponse);
+          .then(function (res) {
+            expect(res.body).to.equal('123');
+            expect(res.status).to.equal(200);
+          });
       });
     });
   });
 
   describe('extensions', function () {
     describe('static extension', function () {
-      beforeEach(function () {
-        nock('http://example.com')
-          .get('/extensions/static.json')
-          .reply(200, 'Success');
-      });
-
       it('should support extensions in the resource chain', function () {
         return client.resources.extensions.static.json.get()
-          .then(expectResponse);
+          .then(validateResponse);
       });
     });
 
     describe('media type extension', function () {
       describe('basic', function () {
-        beforeEach(function () {
-          nock('http://example.com')
-            .get('/extensions/media-type/basic.json')
-            .reply(200, 'Success');
-        });
-
         it('should support mediaTypeExtension parameter', function () {
           return client.resources.extensions.mediaType.basic.mediaTypeExtension('json').get()
-            .then(expectResponse);
+            .then(validateResponse);
         });
       });
 
       describe('enum', function () {
-        beforeEach(function () {
-          nock('http://example.com')
-            .get('/extensions/media-type/enum.json')
-            .reply(200, 'Success');
-        });
-
         it('should have paths from enum values', function () {
           return client.resources.extensions.mediaType.enum.json.get()
-            .then(expectResponse);
+            .then(validateResponse);
         });
       });
 
       describe('enum with period', function () {
-        beforeEach(function () {
-          nock('http://example.com')
-            .get('/extensions/media-type/enum-with-period.xml')
-            .reply(200, 'Success');
-        });
-
         it('should have paths from period prefixed enum values', function () {
           return client.resources.extensions.mediaType.enumWithPeriod.xml.get()
-            .then(expectResponse);
+            .then(validateResponse);
         });
       });
     });
@@ -153,21 +110,13 @@ describe('resource chain', function () {
   describe('conflicts', function () {
     describe('media type extension', function () {
       it('should handle original route', function () {
-        nock('http://example.com')
-          .get('/conflicts/media-type/route')
-          .reply(200, 'Success');
-
         return client.resources.conflicts.mediaType.route.get()
-          .then(expectResponse);
+          .then(validateResponse);
       });
 
       it('should handle conflict with media type extension', function () {
-        nock('http://example.com')
-          .get('/conflicts/media-type.json')
-          .reply(200, 'Success');
-
         return client.resources.conflicts.mediaType.mediaTypeExtension('json').get()
-          .then(expectResponse);
+          .then(validateResponse);
       });
     });
   });

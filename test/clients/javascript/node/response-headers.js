@@ -1,27 +1,25 @@
-var nock    = require('nock');
-var expect  = require('chai').expect;
-var TestApi = require('../.tmp/test');
+var nock       = require('nock');
+var expect     = require('chai').expect;
+var ExampleApi = require('../.tmp/example');
 
-describe('request headers', function () {
-  var client = new TestApi();
-
-  beforeEach(function () {
-    nock('http://example.com')
-      .get('/route')
-      .reply(200, 'Response body', {
-       'Content-Type':    'text/javascript',
-       'X-Custom-Header': 'Custom Header Response'
-     });
-  });
+describe('response headers', function () {
+  var client = new ExampleApi();
 
   it('should return in a lower-cased object', function () {
-    return client.resources.route.get()
-      .then(function (response) {
-        expect(response.body).to.equal('Response body');
-        expect(response.status).to.equal(200);
-        expect(response.headers).to.deep.equal({
-          'content-type':    'text/javascript',
-          'x-custom-header': 'Custom Header Response'
+    return client.resources.get()
+      .then(function (res) {
+        expect(res.body).to.equal('Success');
+        expect(res.status).to.equal(200);
+        expect(res.headers).to.deep.equal({
+          'access-control-allow-headers': 'Content-Type',
+          'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE',
+          'access-control-allow-origin':  '*',
+          'content-type':                 'text/html; charset=utf-8',
+          'connection':                   'keep-alive',
+          'date':                         new Date().toUTCString(),
+          'etag':                         'W/"7-a0bde62e"',
+          'content-length':               '7',
+          'x-powered-by':                 'Express'
         });
       });
   });

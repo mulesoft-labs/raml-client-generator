@@ -1,38 +1,15 @@
 describe('response headers', function () {
-  var client = new TestApi();
-  var server;
-
-  before(function () {
-    server = sinon.fakeServer.create();
-
-    server.autoRespond = true;
-
-    server.respondWith(
-      'GET',
-      'http://example.com/route',
-      [
-        200,
-        {
-          'Content-Type':    'text/javascript',
-          'X-Custom-Header': 'Custom Header Response'
-        },
-        'Response body'
-      ]
-    );
-  });
-
-  after(function () {
-    server.restore();
-  });
+  var client = new ExampleApi();
 
   it('should return in a lower-cased object', function () {
-    return client.resources.route.get()
-      .then(function (response) {
-        expect(response.body).to.equal('Response body');
-        expect(response.status).to.equal(200);
-        expect(response.headers).to.deep.equal({
-          'content-type':    'text/javascript',
-          'x-custom-header': 'Custom Header Response'
+    return client.resources.get()
+      .then(function (res) {
+        expect(res.body).to.equal('Success');
+        expect(res.status).to.equal(200);
+
+        // Only have access to certain headers in browsers.
+        expect(res.headers).to.deep.equal({
+          'content-type': 'text/html; charset=utf-8'
         });
       });
   });

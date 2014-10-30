@@ -1,28 +1,27 @@
-var nock      = require('nock');
-var expect    = require('chai').expect;
-var methods   = require('methods');
-var camelCase = require('camel-case');
-var TestApi   = require('../.tmp/test');
+var expect     = require('chai').expect;
+var methods    = require('methods');
+var camelCase  = require('camel-case');
+var ExampleApi = require('../.tmp/example');
 
 describe('custom resource', function () {
-  var client = new TestApi();
+  var client = new ExampleApi();
 
-  var expectResponse = function (response) {
+  function validateResponse (response) {
     expect(response.body).to.equal('Success');
     expect(response.status).to.equal(200);
   };
 
-  methods.forEach(function (method) {
-    describe(method, function () {
-      beforeEach(function () {
-        nock('http://example.com')
-          .intercept('/route/123', method)
-          .reply(200, 'Success');
-      });
+  methods.forEach(function (verb) {
+    var method = camelCase(verb);
 
+    if (verb === 'connect' || verb === 'head') {
+      return;
+    }
+
+    describe('#' + method, function () {
       it('should be supported', function () {
-        return client.resource('/route/{id}', { id: 123 })[camelCase(method)]()
-          .then(expectResponse);
+        return client.resource('/status/{id}', { id: 200 })[method]()
+          .then(validateResponse);
       });
     });
   });
