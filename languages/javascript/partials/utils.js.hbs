@@ -326,7 +326,7 @@ var toRequestBody = function (body, headers) {
 
   // Set the default mime type to be JSON if none exists.
   if (!type) {
-    type = headers['content-type'] = 'application/json';
+    type = headers['Content-Type'] = 'application/json';
   }
 
   // Stringify the body as JSON.
