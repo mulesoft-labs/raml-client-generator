@@ -15,7 +15,7 @@ describe('response headers', function () {
           'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE',
           'access-control-allow-origin':  '*',
           'content-type':                 'text/html; charset=utf-8',
-          'connection':                   'keep-alive',
+          'connection':                   'close',
           'date':                         new Date().toUTCString(),
           'etag':                         'W/"7-a0bde62e"',
           'content-length':               '7',

@@ -1,5 +1,7 @@
 var path = require('path');
 
+var EXAMPLE_CLIENT_DIR = 'test/clients/javascript/.tmp/example';
+
 /**
  * Initialize Karma with config information.
  *
@@ -34,16 +36,11 @@ module.exports = function (config) {
      * @type {Array}
      */
     files: [
-      // Third party dependencies.
-      'test/clients/javascript/.tmp/example/node_modules/client-oauth2/client-oauth2.js',
-
-      // Polyfill promise support.
-      'test/clients/javascript/vendor/promise.js',
-
-      // Include the test client.
-      'test/clients/javascript/.tmp/example/index.js',
-
-      // Include all the test files.
+      'node_modules/es6-promise/dist/es6-promise.js',
+      'test/clients/javascript/support/globals.js',
+      EXAMPLE_CLIENT_DIR + '/node_modules/popsicle/popsicle.js',
+      EXAMPLE_CLIENT_DIR + '/node_modules/client-oauth2/client-oauth2.js',
+      EXAMPLE_CLIENT_DIR + '/index.js',
       'test/clients/javascript/browser/**/*.js'
     ],
 

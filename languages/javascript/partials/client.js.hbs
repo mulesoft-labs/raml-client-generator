@@ -1,48 +1,22 @@
-/**
- * The base api client instance. Allows multiple instances to be created
- * with different configuration options.
- */
-var Client = function (options) {
+function Client (options) {
   this.options = extend({
     baseUri: {{{stringify baseUri}}},
     baseUriParameters: {{{stringify (object (keys baseUriParameters) (pluck baseUriParameters 'default'))}}}
   }, options);
 
-  this.resource  = customRequest(this);
   this.resources = new {{pascalCase resources.id}}('', this);
 };
 
-/**
- * Every client instance has a property for handling HTTP requests.
- *
- * @param  {Object} options
- * @return {Object}
- */
-Client.prototype.request = function (options) {
-  return new Request(options);
+Client.prototype.resource = function (route, parameters) {
+  var path = '/' + template(route, parameters).replace(/^\//, '');
+
+  return new CustomResource(path, this);
 };
 
-/**
- * Create a multipart form instance with set parameters.
- *
- * @param  {Object}   parameters
- * @return {FormData}
- */
-Client.prototype.form = Client.form = function (parameters) {
-  return toFormData(parameters);
-};
-
-/**
- * Current version of the API.
- */
+Client.prototype.request = popsicle;
+Client.prototype.form = Client.form = popsicle.form;
 Client.prototype.version  = {{{stringify version}}};
 
 {{#if security.[OAuth 2.0]}}
-/**
- * Enable OAuth 2.0 support.
- */
 Client.OAuth2 = OAuth2;
 {{/if}}
-
-Client.Request  = Request;
-Client.FormData = FormData;

@@ -18,7 +18,6 @@ module.exports = generator({
     auth:      require('./partials/auth.js.hbs'),
     utils:     require('./partials/utils.js.hbs'),
     client:    require('./partials/client.js.hbs'),
-    request:   require('./partials/request.js.hbs'),
     resources: require('./partials/resources.js.hbs')
   },
   helpers: {

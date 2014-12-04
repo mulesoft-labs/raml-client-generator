@@ -8,10 +8,9 @@ describe('oauth2', function () {
   describe('#getUri', function () {
     it('should return a valid uri', function () {
       expect(oauth2.code.getUri()).to.equal(
-        'https://localhost:4444/auth/oauth2/authorize?scope=user&' +
-        'client_id=123&' +
+        'https://localhost:4444/auth/oauth2/authorize?client_id=123&' +
         'redirect_uri=http%3A%2F%2Fexample.com%2Fauth%2Fcallback&' +
-        'response_type=code'
+        'scope=user&response_type=code'
       );
     });
   });

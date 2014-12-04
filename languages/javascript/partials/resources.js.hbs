@@ -1,39 +1,24 @@
-/**
- * Consistenty handle HTTP requests.
- *
- * @param  {Object} client
- * @param  {String} uri
- * @param  {String} method
- * @param  {Object} body
- * @param  {Object} options
- * @return {Object}
- */
-var handleRequest = function (client, uri, method, body, options) {
+function handleRequest (client, path, method, body, options) {
   // Extend the base client options with passed in options.
   options = extend({}, client.options, options);
-  options.headers = extendInsensitive({}, options.headers);
 
-  // Generate the base uri dynamically from the client options.
   var baseUri = template(options.baseUri, options.baseUriParameters);
 
-  // Set options that should never be overriden.
-  options.uri    = baseUri.replace(/\/$/, '') + uri;
-  options.method = method;
+  options.url     = baseUri.replace(/\/$/, '') + path;
+  options.method  = method;
+  options.headers = extend({}, options.headers);
 
   if (method === 'GET' || method === 'HEAD') {
-    options.query = toQueryString(body == null ? options.query : body);
-    options.body  = toRequestBody(options.body, options.headers);
+    options.query = body == null ? options.query : body;
   } else {
-    options.body  = toRequestBody(body == null ? options.body : body, options.headers);
-    options.query = toQueryString(options.query);
+    options.body = body == null ? options.body : body;
   }
 
-  {{!-- Make the client object request with sanitized options. --}}
   return client.request(options);
-};
+}
 
 {{#each allResources}}
-var {{pascalCase id}} = function (uri, client) {
+function {{pascalCase id}} (uri, client) {
   this._uri    = uri;
   this._client = client;
 
@@ -58,7 +43,7 @@ var {{pascalCase id}} = function (uri, client) {
 {{pascalCase ../id}}.prototype.{{@key}} = function (body, options) {
   {{#if (keys headers)}}
   options = extend({}, options);
-  options.headers = extendInsensitive({{{stringify (object (keys headers) (pluck headers 'default'))}}}, options.headers);
+  options.headers = extend({{{stringify (object (keys headers) (pluck headers 'default'))}}}, options.headers);
 
   {{/if}}
   return handleRequest(this._client, this._uri, {{{stringify (upperCase method)}}}, body, options);
@@ -66,10 +51,10 @@ var {{pascalCase id}} = function (uri, client) {
 {{/each}}
 {{/each}}
 
-var CustomResource = function (uri, client) {
+function CustomResource (uri, client) {
   this._uri    = uri;
   this._client = client;
-};
+}
 
 {{#each supportedMethods}}
 CustomResource.prototype.{{camelCase this}} = function (body, options) {

@@ -38,14 +38,6 @@ describe('flow control', function () {
               .then(validateResponse);
           });
         });
-
-        describe('#tap', function () {
-          it('should resolve', function () {
-            return client.resources.hello[method]()
-              .tap(validateResponse)
-              .then(function () {});
-          });
-        });
       });
     });
   });

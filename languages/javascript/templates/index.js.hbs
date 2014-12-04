@@ -10,13 +10,11 @@
     // Browser globals (root is window).
     root.{{pascalCase title}} = client({{{dependencies this 'browser'}}});
   }
-})(this, function ({{{dependencies this}}}) {
+})(this, function ({{{dependencies this false}}}) {
 {{#indent 2}}
 {{>utils}}
 
 {{>auth}}
-
-{{>request}}
 
 {{>resources}}
 

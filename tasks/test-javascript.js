@@ -19,7 +19,9 @@ gulp.task('test:javascript:node', [
   var testProcess = spawn(MOCHA_PATH, [
     path.join(__dirname, '../test/clients/javascript/node/**/*.js'),
     '-R',
-    'spec'
+    'spec',
+    '--require',
+    path.join(__dirname, '../test/clients/javascript/support/globals.js')
   ]);
 
   testProcess.stdout.pipe(process.stdout);

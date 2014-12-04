@@ -1,27 +1,11 @@
 {{#if security.[OAuth 2.0]}}
-if (ClientOAuth2) {
-  var OAuth2 = function (opts) {
-    ClientOAuth2.call(this, extend({{{stringify security.[OAuth 2.0].settings}}}, opts));
+function OAuth2 (opts) {
+  ClientOAuth2.call(this, extend({{{stringify security.[OAuth 2.0].settings}}}, opts));
 
-    return this;
-  };
+  return this;
+};
 
-  /**
-   * Inherit from the ClientOAuth2 module.
-   */
-  OAuth2.prototype = Object.create(ClientOAuth2);
-  OAuth2.prototype.constructor = OAuth2;
-
-  /**
-   * Update request method to use the supported client request method.
-   *
-   * @param {Object}   options
-   * @param {Function} done
-   */
-  OAuth2.prototype.request = function (options, done) {
-    return new Request(options).then(function (res) {
-      return done(null, res);
-    }, done);
-  };
-}
+OAuth2.prototype = Object.create(ClientOAuth2);
+OAuth2.prototype.constructor = OAuth2;
+OAuth2.prototype.request = popsicle;
 {{/if}}
