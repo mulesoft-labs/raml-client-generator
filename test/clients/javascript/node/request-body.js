@@ -1,7 +1,6 @@
 var qs         = require('querystring');
 var nock       = require('nock');
 var expect     = require('chai').expect;
-var FormData   = require('../.tmp/example/node_modules/form-data');
 var ExampleApi = require('../.tmp/example');
 
 describe('request body', function () {
@@ -77,47 +76,6 @@ describe('request body', function () {
               expect(response.status).to.equal(200);
             });
         });
-      });
-    });
-  });
-
-  describe('host objects', function () {
-    describe('form data', function () {
-      var BOUNDARY_REGEXP = /^multipart\/form-data; boundary=([^;]+)/;
-
-      function validateResponse (response) {
-        expect(response.status).to.equal(200);
-
-        var reqContentType = response.headers['content-type'];
-        var reqBoundary    = BOUNDARY_REGEXP.exec(reqContentType)[1];
-
-        expect(response.body).to.equal([
-          '--' + reqBoundary,
-          'Content-Disposition: form-data; name="username"',
-          '',
-          REQUEST_BODY.username,
-          '--' + reqBoundary,
-          'Content-Disposition: form-data; name="password"',
-          '',
-          REQUEST_BODY.password,
-          '--' + reqBoundary + '--'
-        ].join('\r\n'));
-      }
-
-      it('should create form data instance', function () {
-        var data = client.form(REQUEST_BODY);
-
-        expect(data).to.be.an.instanceOf(FormData);
-
-        return client.resources.bounce.body.post(data).then(validateResponse);
-      });
-
-      it('should stringify to form data when set to multipart', function () {
-        return client.resources.bounce.body.post(REQUEST_BODY, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then(validateResponse);
       });
     });
   });
