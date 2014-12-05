@@ -59,9 +59,9 @@ describe('flow control', function () {
           client.resources.hello.get(),
           client.resources.hello.post()
         ])
-        .then(function (requests) {
-          var get  = requests[0];
-          var post = requests[1];
+        .then(function (responses) {
+          var get  = responses[0];
+          var post = responses[1];
 
           expect(get.body).to.equal('Hello World!');
           expect(get.status).to.equal(200);

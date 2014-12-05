@@ -72,10 +72,12 @@ var bounce = new express.Router()
     return req.pipe(res);
   })
   .all('/query', function (req, res) {
-    return res.send(req.query)
+    return res.send(req.query);
   })
   .all('/headers', function (req, res) {
-    res.header('Access-Control-Allow-Headers', 'X-Default-Header, X-Custom-Header');
+    res.header(
+      'Access-Control-Allow-Headers', 'X-Default-Header, X-Custom-Header'
+    );
 
     return res.send(req.headers);
   })
@@ -98,7 +100,7 @@ app.all('/parameters/prefix/three:id', idParamHandler);
  */
 app.all('/extensions/static.json', successHandler);
 app.all('/extensions/media-type/enum.:ext(json|xml)', successHandler);
-app.all('/extensions/media-type/enum-with-period.:ext(json|xml)', successHandler);
+app.all('/extensions/media-type/enum-period.:ext(json|xml)', successHandler);
 app.all('/extensions/media-type/basic.:ext', successHandler);
 
 /**
@@ -128,7 +130,7 @@ app.all('/responses/url-encoded/basic', function (req, res) {
   res.setHeader('Content-Type', 'application/x-www-form-urlencoded');
 
   return res.send('key=value');
-})
+});
 
 /**
  * Respond to url encoded endpoint.
@@ -137,7 +139,7 @@ app.all('/responses/url-encoded/duplicate', function (req, res) {
   res.setHeader('Content-Type', 'application/x-www-form-urlencoded');
 
   return res.send('key=1&key=2&key=3');
-})
+});
 
 /**
  * Respond to url encoded endpoint.
@@ -146,7 +148,7 @@ app.all('/responses/url-encoded/escaped', function (req, res) {
   res.setHeader('Content-Type', 'application/x-www-form-urlencoded');
 
   return res.send(qs.stringify({ key: 'Hello, world!' }));
-})
+});
 
 /**
  * Listen to a port if the module wasn't required.

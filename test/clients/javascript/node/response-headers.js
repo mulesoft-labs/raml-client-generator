@@ -1,4 +1,3 @@
-var nock       = require('nock');
 var expect     = require('chai').expect;
 var ExampleApi = require('../.tmp/example');
 

@@ -11,16 +11,23 @@ var MOCHA_PATH = path.join(__dirname, '../node_modules/mocha/bin/mocha');
 /**
  * Check the code conforms to JSHint guidelines.
  */
-gulp.task('test:lib:jshint', function () {
-  return gulp.src(path.join(__dirname, '../lib/**/*.js'))
+gulp.task('test:lint:javascript', function () {
+  return gulp.src(path.join(__dirname, '../{lib,languages,test}/**/*.js'))
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
 
 /**
+ * Lint all files.
+ */
+gulp.task('test:lint', [
+  'test:lint:javascript'
+]);
+
+/**
  * Test the module code.
  */
-gulp.task('test:lib', ['test:lib:jshint'], function () {
+gulp.task('test:lib', function () {
   var testProcess = spawn(MOCHA_PATH, [
     path.join(__dirname, '../test/lib/**/*.js'),
     '-R',
@@ -37,6 +44,7 @@ gulp.task('test:lib', ['test:lib:jshint'], function () {
  * Run all tests.
  */
 gulp.task('test', [
+  'test:lint',
   'test:lib',
   'test:javascript'
 ]);

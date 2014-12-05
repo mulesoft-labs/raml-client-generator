@@ -1,4 +1,3 @@
-var nock       = require('nock');
 var expect     = require('chai').expect;
 var ExampleApi = require('../.tmp/example');
 
@@ -86,7 +85,8 @@ describe('resource chain', function () {
     describe('media type extension', function () {
       describe('basic', function () {
         it('should support mediaTypeExtension parameter', function () {
-          return client.resources.extensions.mediaType.basic.mediaTypeExtension('json').get()
+          return client.resources.extensions.mediaType.basic
+            .mediaTypeExtension('json').get()
             .then(validateResponse);
         });
       });
@@ -100,7 +100,7 @@ describe('resource chain', function () {
 
       describe('enum with period', function () {
         it('should have paths from period prefixed enum values', function () {
-          return client.resources.extensions.mediaType.enumWithPeriod.xml.get()
+          return client.resources.extensions.mediaType.enumPeriod.xml.get()
             .then(validateResponse);
         });
       });
@@ -115,7 +115,8 @@ describe('resource chain', function () {
       });
 
       it('should handle conflict with media type extension', function () {
-        return client.resources.conflicts.mediaType.mediaTypeExtension('json').get()
+        return client.resources.conflicts.mediaType
+          .mediaTypeExtension('json').get()
           .then(validateResponse);
       });
     });

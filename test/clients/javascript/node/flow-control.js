@@ -1,7 +1,6 @@
 var fs         = require('fs');
 var path       = require('path');
 var expect     = require('chai').expect;
-var Promise    = require('bluebird');
 var equal      = require('../support/stream-equal');
 var ExampleApi = require('../.tmp/example');
 
@@ -73,7 +72,10 @@ describe('flow control', function () {
           client.resources.hello.get(),
           client.resources.hello.post()
         ])
-        .spread(function (get, post) {
+        .then(function (responses) {
+          var get  = responses[0];
+          var post = responses[1];
+
           expect(get.body).to.equal('Hello World!');
           expect(get.status).to.equal(200);
           expect(get.headers).to.be.an('object');

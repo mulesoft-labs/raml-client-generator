@@ -9,7 +9,7 @@ describe('custom resource', function () {
   function validateResponse (response) {
     expect(response.body).to.equal('Success');
     expect(response.status).to.equal(200);
-  };
+  }
 
   methods.forEach(function (verb) {
     var method = camelCase(verb);

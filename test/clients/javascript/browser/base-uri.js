@@ -1,4 +1,6 @@
 describe('base uri', function () {
+  var server;
+
   function validateResponse (response) {
     expect(response.body).to.equal('Hello World!');
     expect(response.status).to.equal(200);

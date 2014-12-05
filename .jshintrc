@@ -22,5 +22,17 @@
   "multistr": false,    // Prohibit the use of multi-line strings.
   "eqnull":   true,     // Tolerate use of `== null`.
   "expr":     true,     // Tolerate `ExpressionStatement` as Programs.
-  "node":     true      // Enable standard globals available when code is running inside of the NodeJS runtime environment.
+  "browser":  true,     // Enable standard globals available in the browser.
+  "node":     true,     // Enable standard globals available in the NodeJS runtime.
+  "globals": {
+    "it":         true,
+    "describe":   true,
+    "before":     true,
+    "beforeEach": true,
+    "after":      true,
+    "afterEach":  true,
+    "expect":     true,
+    "sinon":      true,
+    "ExampleApi": true
+  }
 }

@@ -5,15 +5,15 @@
  */
 var DEPS_MAP = {
   node: {
-    popsicle:     "require('popsicle')",
-    ClientOAuth2: "require('client-oauth2')"
+    popsicle:     'require(\'popsicle\')',
+    ClientOAuth2: 'require(\'client-oauth2\')'
   },
   amd: {
-    popsicle:     "'popsicle'",
-    ClientOAuth2: "'ClientOAuth2'"
+    popsicle:     '\'popsicle\'',
+    ClientOAuth2: '\'ClientOAuth2\''
   },
   browser: {
-    popsicle:     "root.popsicle",
+    popsicle:     'root.popsicle',
     ClientOAuth2: 'root.ClientOAuth2'
   }
 };
