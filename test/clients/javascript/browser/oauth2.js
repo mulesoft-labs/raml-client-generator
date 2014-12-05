@@ -14,4 +14,18 @@ describe('oauth2', function () {
       );
     });
   });
+
+  describe('user support', function () {
+    var client = new ExampleApi({
+      user: oauth2.createToken('abc')
+    });
+
+    it('should sign requests', function () {
+      return client.resources.bounce.headers.get()
+        .then(function (response) {
+          expect(response.status).to.equal(200);
+          expect(response.body.authorization).to.equal('Bearer abc');
+        });
+    });
+  });
 });

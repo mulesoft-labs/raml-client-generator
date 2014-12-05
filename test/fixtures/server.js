@@ -76,7 +76,8 @@ var bounce = new express.Router()
   })
   .all('/headers', function (req, res) {
     res.header(
-      'Access-Control-Allow-Headers', 'X-Default-Header, X-Custom-Header'
+      'Access-Control-Allow-Headers',
+      'Authorization, X-Default-Header, X-Custom-Header'
     );
 
     return res.send(req.headers);

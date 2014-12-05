@@ -1,20 +1,26 @@
 function handleRequest (client, path, method, body, options) {
-  // Extend the base client options with passed in options.
   options = extend({}, client.options, options);
 
   var baseUri = template(options.baseUri, options.baseUriParameters);
+  var reqOpts = {};
 
-  options.url     = baseUri.replace(/\/$/, '') + path;
-  options.method  = method;
-  options.headers = extend({}, options.headers);
+  reqOpts.url     = baseUri.replace(/\/$/, '') + path;
+  reqOpts.method  = method;
+  reqOpts.headers = extend({}, options.headers);
 
   if (method === 'GET' || method === 'HEAD') {
-    options.query = body == null ? options.query : body;
+    reqOpts.body = options.body;
+    reqOpts.query = body == null ? options.query : body;
   } else {
-    options.body = body == null ? options.body : body;
+    reqOpts.body = body == null ? options.body : body;
+    reqOpts.query = options.query;
   }
 
-  return client.request(options);
+  if (options.user && typeof options.user.sign === 'function') {
+    options.user.sign(reqOpts);
+  }
+
+  return client.request(reqOpts);
 }
 
 {{#each allResources}}
