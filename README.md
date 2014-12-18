@@ -3,8 +3,6 @@
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
 
-**Currently Experimental**
-
 Template-driven generator of clients for APIs described by RAML.
 
 ## Installation
