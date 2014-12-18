@@ -22,16 +22,11 @@ var client = new {{pascalCase title}}();
 {{#each methods}}
 #### client.{{{requestSnippet this}}}
 
-{{{trim description}}}
+{{#if (trim description)}}{{{trim description}}}
 
-{{#if ../uriParameters}}
-##### Method Parameters
+{{/if}}{{#if ../uriParameters}}{{{parametersSnippet ../../uriParameters}}}
 
-{{{parametersSnippet ../../uriParameters}}}
-{{/if}}
-
-{{#if (values queryParameters)}}
-##### Query Parameters
+{{/if}}{{#if (values queryParameters)}}##### Query Parameters
 
 ```javascript
 {{#if (equal method 'get')}}
@@ -42,24 +37,18 @@ var client = new {{pascalCase title}}();
 ```
 
 {{{parametersSnippet queryParameters}}}
-{{/if}}
 
-{{#if (values headers)}}
-##### Headers
+{{/if}}{{#if (values headers)}}##### Headers
 
 ```javascript
 {{key}}(null, {
-  headers {
-    'X-Example-Header': 'Example value'
-  }
+  headers: { ... }
 });
 ```
 
 {{{parametersSnippet headers}}}
-{{/if}}
 
-{{#if (values body)}}
-##### Body
+{{/if}}{{#if (values body)}}##### Body
 
 {{#each body}}
 **{{@key}}**
@@ -68,17 +57,10 @@ var client = new {{pascalCase title}}();
 ```
 {{{schema}}}
 ```
-{{/if}}
 
-{{#if formParameters}}
-{{{json formParameters 2}}}
-{{/if}}
+{{/if}}{{#if formParameters}}{{{json formParameters 2}}}
 
-{{/each}}
-{{/if}}
-
-{{/each}}
-{{/each}}
+{{/if}}{{/each}}{{/if}}{{/each}}{{/each}}
 
 ### Custom Resources
 

@@ -1,3 +1,4 @@
+var _         = require('lodash');
 var stringify = require('javascript-stringify');
 
 /**
@@ -7,12 +8,7 @@ var stringify = require('javascript-stringify');
  * @return {String}
  */
 var params = function (resource) {
-  return resource.uriParameters.map(function (parameter) {
-    var displayName  = parameter.displayName;
-    var defaultValue = parameter.default ? stringify(parameter.default) : null;
-
-    return displayName + (defaultValue ? ' = ' + defaultValue : '');
-  }).join(', ');
+  return _.pluck(resource.uriParameters, 'displayName').join(', ');
 };
 
 /**

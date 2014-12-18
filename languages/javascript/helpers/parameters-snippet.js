@@ -7,7 +7,7 @@
 module.exports = function (parameters) {
   return Object.keys(parameters).map(function (key) {
     var parameter = parameters[key];
-    var title     = '**' + parameter.displayName + '**';
+    var title     = '* **' + parameter.displayName + '**';
     var options   = [];
 
     if (parameter.type) {
