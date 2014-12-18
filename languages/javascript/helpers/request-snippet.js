@@ -12,14 +12,14 @@ var params = function (resource) {
 };
 
 /**
- * Stringify a method into a resource request snippet.
+ * Stringify a resource into a request snippet.
  *
- * @param  {Object} method
+ * @param  {Object} resource
  * @return {String}
  */
-module.exports = function (method) {
+module.exports = function (resource) {
   var parts = [];
-  var part  = method.resource;
+  var part  = resource;
 
   while (part && part.parent) {
     var segment = part.key;
@@ -34,8 +34,5 @@ module.exports = function (method) {
     part = part.parent;
   }
 
-  // Push the request method onto the segment stack.
-  parts.push(method.key + '()');
-
-  return 'resources.' + parts.join('.');
+  return 'resources' + (parts.length ? '.' + parts.join('.') : '');
 };

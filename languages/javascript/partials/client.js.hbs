@@ -16,7 +16,3 @@ Client.prototype.resource = function (route, parameters) {
 Client.prototype.request = popsicle;
 Client.prototype.form = Client.form = popsicle.form;
 Client.prototype.version  = {{{stringify version}}};
-
-{{#if security.[OAuth 2.0]}}
-Client.OAuth2 = OAuth2;
-{{/if}}
