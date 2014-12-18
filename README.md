@@ -23,7 +23,7 @@ raml-to-client api.raml -o api-client -l javascript
 
 ## Supported Languages
 
-* [JavaScript](languages/javascript) (`javascript`)
+* [JavaScript](languages/javascript) (`javascript`) **Node and browsers, promises, OAuth 2.0, multiple instances, automatic README.md and package.json generation, multi-part form data**
 
 We're excited to see new languages soon! If you have a language you'd like to implement, check out the [implementation guide](IMPLEMENTATION.md).
 
