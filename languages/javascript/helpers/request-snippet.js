@@ -1,5 +1,4 @@
-var _         = require('lodash');
-var stringify = require('javascript-stringify');
+var _ = require('lodash');
 
 /**
  * Pull out request parameters from the resource.
