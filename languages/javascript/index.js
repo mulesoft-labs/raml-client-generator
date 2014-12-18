@@ -7,6 +7,7 @@ var generator = require('../../lib/generator');
  */
 module.exports = generator({
   files: {
+    '.gitignore':   require('./templates/.gitignore.hbs'),
     'index.js':     require('./templates/index.js.hbs'),
     'README.md':    require('./templates/README.md.hbs'),
     'package.json': require('./templates/package.json.hbs')
