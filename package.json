@@ -2,7 +2,15 @@
   "name": "raml-client-generator",
   "version": "0.0.1",
   "description": "Template-driven generator of clients for APIs described by RAML",
-  "main": "generators/index.js",
+  "main": "languages/index.js",
+  "browser": {
+    "handlebars": false
+  },
+  "browserify": {
+    "transform": [
+      "hbsfy"
+    ]
+  },
   "scripts": {
     "test": "gulp test",
     "test-ci": "gulp test --ci"
@@ -33,6 +41,7 @@
     "express": "^4.10.0",
     "gulp": "^3.8.8",
     "gulp-jshint": "^1.8.4",
+    "hbsfy": "^2.2.1",
     "karma": "^0.12.23",
     "karma-chrome-launcher": "^0.1.4",
     "karma-firefox-launcher": "^0.1.3",
