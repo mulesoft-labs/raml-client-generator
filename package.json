@@ -4,6 +4,7 @@
   "description": "Template-driven generator of clients for APIs described by RAML",
   "main": "languages/index.js",
   "browser": {
+    "http": false,
     "handlebars": false
   },
   "browserify": {
@@ -63,7 +64,6 @@
     "indent-string": "^1.1.0",
     "javascript-stringify": "^1.0.0",
     "lower-case": "^1.0.2",
-    "methods": "^1.1.0",
     "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",
     "object.pick": "^1.1.0",
