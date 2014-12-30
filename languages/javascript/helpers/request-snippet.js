@@ -1,5 +1,3 @@
-var _ = require('lodash');
-
 /**
  * Pull out request parameters from the resource.
  *
@@ -7,7 +5,9 @@ var _ = require('lodash');
  * @return {String}
  */
 var params = function (resource) {
-  return _.pluck(resource.uriParameters, 'displayName').join(', ');
+  return resource.uriParameters.map(function (param) {
+    return param.displayName;
+  }).join(', ');
 };
 
 /**

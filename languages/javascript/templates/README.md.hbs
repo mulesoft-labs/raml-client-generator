@@ -138,7 +138,7 @@ var resource = client.{{{requestSnippet this}}};
 resource.{{key}}().then(function (res) { ... });
 ```
 
-{{#if (values queryParameters)}}##### Query Parameters
+{{#if (keys queryParameters)}}##### Query Parameters
 
 ```javascript
 {{#if (equal method 'get')}}
@@ -150,7 +150,7 @@ resource.{{key}}(null, { query: { ... } });
 
 {{{parametersSnippet queryParameters}}}
 
-{{/if}}{{#if (values headers)}}##### Headers
+{{/if}}{{#if (keys headers)}}##### Headers
 
 ```javascript
 resource.{{key}}(null, {
@@ -160,7 +160,7 @@ resource.{{key}}(null, {
 
 {{{parametersSnippet headers}}}
 
-{{/if}}{{#if (values body)}}##### Body
+{{/if}}{{#if (keys body)}}##### Body
 
 {{#each body}}
 **{{@key}}**
