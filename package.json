@@ -14,7 +14,8 @@
   },
   "scripts": {
     "test": "gulp test",
-    "test-ci": "gulp test --ci"
+    "test-ci": "gulp test --ci",
+    "build": "browserify . -s ramlClientGenerator -o dist/raml-client-generator.js"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
   },
   "homepage": "https://github.com/mulesoft/raml-client-generator",
   "devDependencies": {
+    "browserify": "^8.0.2",
     "chai": "^1.9.1",
     "concat-stream": "^1.4.6",
     "es6-promise": "^2.0.0",
