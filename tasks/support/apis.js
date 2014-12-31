@@ -13,8 +13,10 @@ var RAML_DIR = path.join(__dirname, '../../test/fixtures/raml');
  *
  * @type {Array}
  */
-module.exports = fs.readdirSync(RAML_DIR).filter(function (filename) {
-  return path.extname(filename) === '.raml';
-}).map(function (filename) {
-  return path.join(RAML_DIR, filename);
-});
+module.exports = fs.readdirSync(RAML_DIR)
+  .filter(function (filename) {
+    return path.extname(filename) === '.raml';
+  })
+  .map(function (filename) {
+    return path.join(RAML_DIR, filename);
+  });

@@ -1,5 +1,5 @@
 var gulp     = require('gulp');
-var Promise  = require('bluebird');
+var Bluebird = require('bluebird');
 var exec     = require('./support/exec');
 var generate = require('./support/generate');
 
@@ -12,6 +12,6 @@ gulp.task('generate:javascript', function () {
       return exec('cd ' + output + ' && npm install');
     });
 
-    return Promise.all(npmInstall);
+    return Bluebird.all(npmInstall);
   });
 });

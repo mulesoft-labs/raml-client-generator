@@ -1,7 +1,7 @@
-var path    = require('path');
-var Promise = require('bluebird');
-var apis    = require('./apis');
-var exec    = require('./exec');
+var path     = require('path');
+var Bluebird = require('bluebird');
+var apis     = require('./apis');
+var exec     = require('./exec');
 
 /**
  * Path to the client test directory.
@@ -47,6 +47,5 @@ module.exports = function (language) {
       .return(output);
   });
 
-  // Return a promise for all created clients.
-  return Promise.all(clients);
+  return Bluebird.all(clients);
 };

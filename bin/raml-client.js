@@ -2,7 +2,7 @@
 
 var _          = require('lodash');
 var assert     = require('assert');
-var Promise    = require('bluebird');
+var Bluebird   = require('bluebird');
 var resolve    = require('path').resolve;
 var ramlParser = require('raml-parser');
 var pkg        = require('../package');
@@ -53,7 +53,7 @@ var options = {
 /**
  * Generate the API client.
  */
-Promise.resolve(options)
+Bluebird.resolve(options)
   .tap(function (options) {
     assert(languages.hasOwnProperty(options.language), 'Unsupported language');
   })
