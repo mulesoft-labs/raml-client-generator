@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-var _          = require('lodash');
 var assert     = require('assert');
 var Bluebird   = require('bluebird');
 var resolve    = require('path').resolve;
