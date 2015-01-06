@@ -52,7 +52,7 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-sinon-chai": "^0.2.0",
     "mocha": "^2.0.1",
-    "nock": "^0.52.4",
+    "nock": "^0.55.0",
     "require-dir": "^0.1.0",
     "stream-equal": "^0.1.5"
   },
