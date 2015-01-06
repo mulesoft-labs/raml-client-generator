@@ -3,12 +3,9 @@
   "version": "0.0.0",
   "description": "{{description}}",
   "main": "index.js",
-  "scripts": {
-    "test": ""
-  },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mulesoft-labs/raml-client-generator.git"
+    "url": "git://github.com/mulesoft/raml-client-generator.git"
   },
   "keywords": [
     "raml-api"
@@ -16,12 +13,11 @@
   "author": "MuleSoft, Inc.",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/mulesoft-labs/raml-client-generator/issues"
+    "url": "https://github.com/mulesoft/raml-client-generator/issues"
   },
-  "homepage": "https://github.com/mulesoft-labs/raml-client-generator",
+  "homepage": "https://github.com/mulesoft/raml-client-generator",
   "dependencies": {
-    "bluebird": "^2.2.2",{{#if security.[OAuth 2.0]}}
-    "client-oauth2": "^0.1.0",{{/if}}
-    "popsicle": "^0.0.2"
+    {{#if security.[OAuth 2.0]}}"client-oauth2": "^0.1.0",
+    {{/if}}"popsicle": "^0.3.3"
   }
 }
