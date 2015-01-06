@@ -17,6 +17,10 @@
     "test-ci": "gulp test --ci",
     "build": "browserify . -s ramlClientGenerator -o dist/raml-client-generator.js"
   },
+  "pre-commit": [
+    "build",
+    "test"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/mulesoft/raml-client-generator.git"
@@ -53,6 +57,7 @@
     "karma-sinon-chai": "^0.2.0",
     "mocha": "^2.0.1",
     "nock": "^0.55.0",
+    "pre-commit": "0.0.9",
     "require-dir": "^0.1.0",
     "stream-equal": "^0.1.5"
   },
