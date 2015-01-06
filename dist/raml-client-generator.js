@@ -489,16 +489,16 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partials,data) {
-  return "\n    \"client-oauth2\": \"^0.1.0\",";
+  return "\"client-oauth2\": \"^0.1.0\",\n    ";
   },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function", buffer = "{\n  \"name\": \""
     + escapeExpression(((helpers.paramCase || (depth0 && depth0.paramCase) || helperMissing).call(depth0, (depth0 != null ? depth0.title : depth0), {"name":"paramCase","hash":{},"data":data})))
     + "\",\n  \"version\": \"0.0.0\",\n  \"description\": \""
     + escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"description","hash":{},"data":data}) : helper)))
-    + "\",\n  \"main\": \"index.js\",\n  \"scripts\": {\n    \"test\": \"\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git://github.com/mulesoft-labs/raml-client-generator.git\"\n  },\n  \"keywords\": [\n    \"raml-api\"\n  ],\n  \"author\": \"MuleSoft, Inc.\",\n  \"license\": \"Apache 2.0\",\n  \"bugs\": {\n    \"url\": \"https://github.com/mulesoft-labs/raml-client-generator/issues\"\n  },\n  \"homepage\": \"https://github.com/mulesoft-labs/raml-client-generator\",\n  \"dependencies\": {\n    \"bluebird\": \"^2.2.2\",";
+    + "\",\n  \"main\": \"index.js\",\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git://github.com/mulesoft/raml-client-generator.git\"\n  },\n  \"keywords\": [\n    \"raml-api\"\n  ],\n  \"author\": \"MuleSoft, Inc.\",\n  \"license\": \"Apache 2.0\",\n  \"bugs\": {\n    \"url\": \"https://github.com/mulesoft/raml-client-generator/issues\"\n  },\n  \"homepage\": \"https://github.com/mulesoft/raml-client-generator\",\n  \"dependencies\": {\n    ";
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 != null ? depth0.security : depth0)) != null ? stack1['OAuth 2.0'] : stack1), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n    \"popsicle\": \"^0.0.2\"\n  }\n}\n";
+  return buffer + "\"popsicle\": \"^0.3.4\"\n  }\n}\n";
 },"useData":true});
 
 },{"hbsfy/runtime":41}],13:[function(require,module,exports){
@@ -2377,8 +2377,6 @@ var INVALID_BASE64_RE = /[^+\/0-9A-z\-]/g
 function base64clean (str) {
   // Node strips out invalid characters like \n and \t from the string, base64-js does not
   str = stringtrim(str).replace(INVALID_BASE64_RE, '')
-  // replace url-safe space and slash
-  str = str.replace(/-/g, '+').replace(/_/g, '/')
   // Node converts strings with length < 2 to ''
   if (str.length < 2) return ''
   // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
@@ -2563,12 +2561,16 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	var NUMBER = '0'.charCodeAt(0)
 	var LOWER  = 'a'.charCodeAt(0)
 	var UPPER  = 'A'.charCodeAt(0)
+	var PLUS_URL_SAFE = '-'.charCodeAt(0)
+	var SLASH_URL_SAFE = '_'.charCodeAt(0)
 
 	function decode (elt) {
 		var code = elt.charCodeAt(0)
-		if (code === PLUS)
+		if (code === PLUS ||
+		    code === PLUS_URL_SAFE)
 			return 62 // '+'
-		if (code === SLASH)
+		if (code === SLASH ||
+		    code === SLASH_URL_SAFE)
 			return 63 // '/'
 		if (code < NUMBER)
 			return -1 //no match
