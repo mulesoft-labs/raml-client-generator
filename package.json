@@ -15,10 +15,12 @@
   "scripts": {
     "test": "gulp test",
     "test-ci": "gulp test --ci",
-    "build": "browserify . -s ramlClientGenerator -o dist/raml-client-generator.js"
+    "build": "browserify . -s ramlClientGenerator -o dist/raml-client-generator.js && uglifyjs dist/raml-client-generator.js -o dist/raml-client-generator.min.js",
+    "stage-build": "git add dist"
   },
   "pre-commit": [
     "build",
+    "stage-build",
     "test"
   ],
   "repository": {
