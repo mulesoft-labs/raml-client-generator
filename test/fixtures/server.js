@@ -67,7 +67,9 @@ var bounce = new express.Router()
     return res.send(req.originalUrl);
   })
   .all('/body', function (req, res) {
-    res.setHeader('Content-Type', req.headers['content-type']);
+    if (req.headers['content-type']) {
+      res.setHeader('Content-Type', req.headers['content-type']);
+    }
 
     return req.pipe(res);
   })
