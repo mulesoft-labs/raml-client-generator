@@ -498,7 +498,7 @@ module.exports = HandlebarsCompiler.template({"1":function(depth0,helpers,partia
     + "\",\n  \"main\": \"index.js\",\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git://github.com/mulesoft/raml-client-generator.git\"\n  },\n  \"keywords\": [\n    \"raml-api\"\n  ],\n  \"author\": \"MuleSoft, Inc.\",\n  \"license\": \"Apache 2.0\",\n  \"bugs\": {\n    \"url\": \"https://github.com/mulesoft/raml-client-generator/issues\"\n  },\n  \"homepage\": \"https://github.com/mulesoft/raml-client-generator\",\n  \"dependencies\": {\n    ";
   stack1 = helpers['if'].call(depth0, ((stack1 = (depth0 != null ? depth0.security : depth0)) != null ? stack1['OAuth 2.0'] : stack1), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\"popsicle\": \"^0.3.4\"\n  }\n}\n";
+  return buffer + "\"popsicle\": \"^0.3.6\"\n  }\n}\n";
 },"useData":true});
 
 },{"hbsfy/runtime":41}],13:[function(require,module,exports){
