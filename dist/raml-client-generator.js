@@ -138,7 +138,7 @@ var generator = require('../../lib/generator');
  * @type {Function}
  */
 module.exports = generator({
-  files: {
+  templates: {
     '.gitignore':   require('./templates/.gitignore.hbs'),
     'index.js':     require('./templates/index.js.hbs'),
     'README.md':    require('./templates/README.md.hbs'),
@@ -1168,7 +1168,7 @@ exports.join = function (array, value) {
 },{"camel-case":27,"constant-case":32,"indent-string":42,"lower-case":46,"param-case":53,"pascal-case":55,"snake-case":60,"upper-case":61}],20:[function(require,module,exports){
 var extend  = require('extend');
 var helpers = require('./helpers');
-var context = require('./context');
+var createContext = require('./context');
 
 /**
  * Compile an api client using a combination of the ast, spec and user data.
@@ -1179,32 +1179,50 @@ var context = require('./context');
  * @return {Object}
  */
 module.exports = function (ast, spec, data) {
+  // Handlebars compile options from the specification.
+  var options = {
+    data:     data,
+    helpers:  extend({}, helpers, spec.helpers),
+    partials: extend({}, spec.partials)
+  };
+
+  // Allow the language to override the file generator.
+  var createFiles = spec.files || generateFiles;
+  var context = createContext(ast, spec);
+  var files = createFiles(spec.templates, context, options);
+
   // Create the compile object. We resolve this object instead of just the
   // files so that external utilities have access to the context object. For
   // example, the "API Notebook" project needs to add runtime documentation.
-  var compile = {
-    files: {},
-    options: {
-      data:     data,
-      helpers:  extend({}, helpers, spec.helpers),
-      partials: extend({}, spec.partials)
-    },
-    context: context(ast, spec)
+  return {
+    files: files,
+    context: context,
+    options: options
   };
+};
 
-  Object.keys(spec.files).forEach(function (key) {
-    var template = spec.files[key];
+/**
+ * Default file generator directly from templates.
+ *
+ * @param  {Object} templates
+ * @param  {Object} context
+ * @param  {Object} options
+ * @return {Object}
+ */
+function generateFiles (templates, context, options) {
+  var files = {};
 
-    compile.files[key] = template(compile.context, compile.options);
+  Object.keys(templates).forEach(function (key) {
+    files[key] = templates[key](context, options);
   });
 
-  return compile;
-};
+  return files;
+}
 
 },{"./context":13,"./helpers":19,"extend":33}],21:[function(require,module,exports){
 var compile = require('./compile');
 
-// Handlebars must be required in node to support `require('x.hbs')`.
+// Handlebars required in node to support `require('x.hbs')`.
 require('handlebars');
 
 /**
