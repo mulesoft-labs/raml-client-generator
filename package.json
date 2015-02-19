@@ -3,6 +3,12 @@
   "version": "0.0.6",
   "description": "Template-driven generator of clients for APIs described by RAML",
   "main": "languages/index.js",
+  "files": [
+    "languages/",
+    "lib/",
+    "bin/",
+    "LICENSE"
+  ],
   "browser": {
     "http": false,
     "handlebars": false
