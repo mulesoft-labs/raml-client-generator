@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var context = require('../../lib/compile/context');
+var context = require('../../lib/context');
 
 describe('context', function () {
   var spec = {

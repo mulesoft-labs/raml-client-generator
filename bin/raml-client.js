@@ -6,7 +6,8 @@ var resolve    = require('path').resolve;
 var ramlParser = require('raml-parser');
 var pkg        = require('../package');
 var languages  = require('../languages');
-var objectToFs = require('../lib/util/object-to-fs');
+var mkdirp     = Bluebird.promisify(require('mkdirp'));
+var writeFile  = Bluebird.promisify(require('fs').writeFile);
 var cwd        = process.cwd();
 
 /**
@@ -73,3 +74,31 @@ Bluebird.resolve(options)
 
     return process.exit(1);
   });
+
+/**
+ * Save on object structure to the file system.
+ *
+ * @param  {String}  dir
+ * @param  {Object}  object
+ * @return {Promise}
+ */
+function objectToFs (dir, object) {
+  var promise = mkdirp(dir);
+
+  Object.keys(object).forEach(function (key) {
+    var content  = object[key];
+    var filename = resolve(dir, key);
+
+    promise = promise.then(function () {
+      if (typeof content === 'object') {
+        return objectToFs(filename, content);
+      }
+
+      return writeFile(filename, content);
+    });
+  });
+
+  return promise.then(function () {
+    return object;
+  });
+}
