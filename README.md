@@ -1,6 +1,7 @@
 # RAML Client Generator
 
 [![NPM version][npm-image]][npm-url]
+[![NPM downloads][downloads-image]][downloads-url]
 [![Build status][travis-image]][travis-url]
 
 Template-driven generator of clients for APIs described by RAML.
@@ -46,5 +47,7 @@ Apache 2.0
 
 [npm-image]: https://img.shields.io/npm/v/raml-client-generator.svg?style=flat
 [npm-url]: https://npmjs.org/package/raml-client-generator
+[downloads-image]: https://img.shields.io/npm/dm/raml-client-generator.svg?style=flat
+[downloads-url]: https://npmjs.org/package/raml-client-generator
 [travis-image]: https://img.shields.io/travis/mulesoft/raml-client-generator.svg?style=flat
 [travis-url]: https://travis-ci.org/mulesoft/raml-client-generator
