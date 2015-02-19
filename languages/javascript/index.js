@@ -10,6 +10,7 @@ module.exports = generator({
     '.gitignore':   require('./templates/.gitignore.hbs'),
     'index.js':     require('./templates/index.js.hbs'),
     'README.md':    require('./templates/README.md.hbs'),
+    'INSTALL.md':   require('./templates/INSTALL.md.hbs'),
     'package.json': require('./templates/package.json.hbs')
   },
   format: {

@@ -8,14 +8,27 @@ Browser and node module for making API requests against [{{title}}]({{baseUri}})
 
 ```
 npm install {{paramCase title}} --save
+bower install {{paramCase title}} --save
 ```
 
 ## Usage
+
+### Node
 
 ```javascript
 var {{pascalCase title}} = require('{{paramCase title}}');
 
 var client = new {{pascalCase title}}();
+```
+
+### Browsers
+
+```html
+<script src="{{paramCase title}}/index.js">
+
+<script>
+  var client = new window.{{pascalCase title}}();
+</script>
 ```
 
 {{#if security.[OAuth 2.0]}}
