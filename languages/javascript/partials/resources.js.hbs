@@ -2,19 +2,19 @@ function handleRequest (client, path, method, body, options) {
   options = extend({}, client.options, options);
 
   var baseUri = template(options.baseUri, options.baseUriParameters);
+  var hasBody = method !== 'GET' && method !== 'HEAD';
   var reqOpts = {};
 
-  reqOpts.url     = baseUri.replace(/\/$/, '') + path;
-  reqOpts.method  = method;
-  reqOpts.headers = extend({}, options.headers);
+  var reqBody = hasBody && body != null ? body : options.body;
+  var reqQuery = !hasBody && body != null ? body : options.query;
 
-  if (method === 'GET' || method === 'HEAD') {
-    reqOpts.body = options.body;
-    reqOpts.query = body == null ? options.query : body;
-  } else {
-    reqOpts.body = body == null ? options.body : body;
-    reqOpts.query = options.query;
-  }
+  var reqOpts = {
+    url: baseUri.replace(/\/$/, '') + path,
+    method: method,
+    headers: extend({}, options.headers),
+    body: reqBody,
+    query: typeof reqQuery === 'object' ? extend({}, reqQuery) : reqQuery
+  };
 
   if (options.user && typeof options.user.sign === 'function') {
     options.user.sign(reqOpts);
