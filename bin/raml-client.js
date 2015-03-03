@@ -3,6 +3,7 @@
 var assert     = require('assert');
 var Bluebird   = require('bluebird');
 var resolve    = require('path').resolve;
+var dirname    = require('path').dirname;
 var ramlParser = require('raml-parser');
 var pkg        = require('../package');
 var languages  = require('../languages');
@@ -88,14 +89,15 @@ function objectToFs (dir, object) {
   Object.keys(object).forEach(function (key) {
     var content  = object[key];
     var filename = resolve(dir, key);
+    var output   = dirname(filename);
 
-    promise = promise.then(function () {
-      if (typeof content === 'object') {
-        return objectToFs(filename, content);
-      }
-
-      return writeFile(filename, content);
-    });
+    promise = promise
+      .then(function () {
+        return mkdirp(output);
+      })
+      .then(function () {
+        return writeFile(filename, content);
+      })
   });
 
   return promise.then(function () {
