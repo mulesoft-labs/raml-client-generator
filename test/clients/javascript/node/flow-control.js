@@ -1,15 +1,5 @@
-var fs         = require('fs');
-var path       = require('path');
 var expect     = require('chai').expect;
-var equal      = require('../support/stream-equal');
 var ExampleApi = require('../.tmp/example');
-
-/**
- * File location of the lorem ipsum static text file.
- *
- * @type {String}
- */
-var LOREM_IPSUM_FILE = path.join(__dirname, '../../../fixtures/lorem.txt');
 
 /**
  * Array of test methods.
@@ -84,26 +74,6 @@ describe('flow control', function () {
           expect(post.status).to.equal(200);
           expect(post.headers).to.be.an('object');
         });
-    });
-  });
-
-  describe('#stream', function () {
-    it('should stream data', function () {
-      var request = fs.createReadStream(LOREM_IPSUM_FILE)
-        .pipe(client.resources.bounce.body.post().stream());
-
-      // Check the it's actually the request stream.
-      expect(request.uri.pathname).to.equal('/bounce/body');
-
-      return equal(request, fs.createReadStream(LOREM_IPSUM_FILE));
-    });
-  });
-
-  describe('#pipe', function () {
-    it('should pipe response', function () {
-      var request = client.resources.stream.get();
-
-      return equal(request, fs.createReadStream(LOREM_IPSUM_FILE));
     });
   });
 
