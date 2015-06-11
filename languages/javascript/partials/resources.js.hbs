@@ -8,13 +8,13 @@ function handleRequest (client, path, method, body, options) {
   var reqBody = hasBody && body != null ? body : options.body;
   var reqQuery = !hasBody && body != null ? body : options.query;
 
-  var reqOpts = {
+  var reqOpts = extend(options, {
     url: baseUri.replace(/\/$/, '') + path,
     method: method,
     headers: extend({}, options.headers),
     body: reqBody,
     query: typeof reqQuery === 'object' ? extend({}, reqQuery) : reqQuery
-  };
+  });
 
   if (options.user && typeof options.user.sign === 'function') {
     options.user.sign(reqOpts);
