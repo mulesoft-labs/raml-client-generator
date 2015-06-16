@@ -9,10 +9,15 @@
   ],
   "scripts": {
     "lint": "standard",
-    "test": "npm run lint && npm run build",
+    "test": "npm run lint",
     "build": "browserify . -g brfs -s ramlClientGenerator -o dist/raml-client-generator.js && uglifyjs dist/raml-client-generator.js -o dist/raml-client-generator.min.js",
-    "prepublish": "npm run build"
+    "stage-build": "git add dist"
   },
+  "pre-commit": [
+    "build",
+    "stage-build",
+    "test"
+  ],
   "standard": {
     "ignore": [
       "coverage/",
