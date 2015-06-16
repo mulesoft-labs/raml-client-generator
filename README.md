@@ -10,7 +10,7 @@ Template-driven generator of clients for APIs described by RAML.
 
 First, make sure [node](http://nodejs.org) has been installed. Then, we can install it using `npm`:
 
-```sh
+```
 npm install raml-client-generator -g
 ```
 
@@ -18,17 +18,17 @@ npm install raml-client-generator -g
 
 To generate an API client, point the command to your base RAML file and specify the output directory and language.
 
-```sh
+```
 raml-to-client api.raml -o api-client -l javascript
 ```
 
 ## Supported Languages
 
-* [JavaScript](languages/javascript) (`javascript`)
+* [JavaScript](https://github.com/mulesoft-labs/raml-javascript-generator) (`javascript`)
   * Node and browser support
   * Promises
   * Complete OAuth 2.0 Support
-  * Multiple instances
+  * Multiple client instances
   * Automatic `README.md` and `package.json` generation
   * Multi-part form data
 
