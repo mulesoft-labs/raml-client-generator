@@ -9,6 +9,4 @@ node_js:
   - "0.10"
   - "0.12"
 
-script: "npm run-script test-ci"
-
 after_script: "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
