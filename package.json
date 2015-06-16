@@ -8,8 +8,18 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "# TODO",
-    "build": "browserify . -g brfs -s ramlClientGenerator -o dist/raml-client-generator.js && uglifyjs dist/raml-client-generator.js -o dist/raml-client-generator.min.js"
+    "lint": "standard",
+    "test": "npm run lint && npm run build",
+    "build": "browserify . -g brfs -s ramlClientGenerator -o dist/raml-client-generator.js && uglifyjs dist/raml-client-generator.js -o dist/raml-client-generator.min.js",
+    "prepublish": "npm run build"
+  },
+  "standard": {
+    "ignore": [
+      "coverage/",
+      "node_modules/",
+      "bower_components/",
+      "dist/"
+    ]
   },
   "repository": {
     "type": "git",
@@ -37,7 +47,8 @@
     "es6-promise": "^2.0.0",
     "express": "^4.10.0",
     "mocha": "^2.0.1",
-    "pre-commit": "^1.0.4"
+    "pre-commit": "^1.0.4",
+    "standard": "^4.2.1"
   },
   "dependencies": {
     "raml-generator": "^0.1.3",

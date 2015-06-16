@@ -2269,7 +2269,7 @@ function registerDefaultHelpers(instance) {
           if(context.hasOwnProperty(key)) {
             // We're running the iterations one step out of sync so we can detect
             // the last iteration without have to scan the object twice and create
-            // an itermediate keys array.
+            // an itermediate keys array. 
             if (priorKey) {
               execIteration(priorKey, i-1);
             }
@@ -4400,7 +4400,7 @@ performAction: function anonymous(yytext,yyleng,yylineno,yy,yystate,$$,_$) {
 
 var $0 = $$.length - 1;
 switch (yystate) {
-case 1: return $$[$0-1];
+case 1: return $$[$0-1]; 
 break;
 case 2:this.$ = new yy.Program($$[$0], null, {}, yy.locInfo(this._$));
 break;
@@ -4440,7 +4440,7 @@ case 18:
     program.chained = true;
 
     this.$ = { strip: $$[$0-2].strip, program: program, chain: true };
-
+  
 break;
 case 19:this.$ = $$[$0];
 break;
@@ -4482,7 +4482,7 @@ case 37:this.$ = yy.preparePath(true, $$[$0], this._$);
 break;
 case 38:this.$ = yy.preparePath(false, $$[$0], this._$);
 break;
-case 39: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2];
+case 39: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2]; 
 break;
 case 40:this.$ = [{part: $$[$0]}];
 break;
@@ -4831,22 +4831,22 @@ case 0:
                                      this.begin("mu");
                                    }
                                    if(yy_.yytext) return 14;
-
+                                 
 break;
 case 1:return 14;
 break;
 case 2:
                                    this.popState();
                                    return 14;
-
+                                 
 break;
 case 3:
                                   yy_.yytext = yy_.yytext.substr(5, yy_.yyleng-9);
                                   this.popState();
                                   return 16;
-
+                                 
 break;
-case 4: return 14;
+case 4: return 14; 
 break;
 case 5:
   this.popState();
@@ -4857,13 +4857,13 @@ case 6:return 59;
 break;
 case 7:return 62;
 break;
-case 8: return 17;
+case 8: return 17; 
 break;
 case 9:
                                   this.popState();
                                   this.begin('raw');
                                   return 21;
-
+                                 
 break;
 case 10:return 53;
 break;
@@ -5338,7 +5338,7 @@ WhitespaceControl.prototype.MustacheStatement = function(mustache) {
   return mustache.strip;
 };
 
-WhitespaceControl.prototype.PartialStatement =
+WhitespaceControl.prototype.PartialStatement = 
     WhitespaceControl.prototype.CommentStatement = function(node) {
   /* istanbul ignore next */
   var strip = node.strip || {};
@@ -5809,7 +5809,7 @@ module.exports = handlebars;
 /* istanbul ignore else */
 if (typeof require !== 'undefined' && require.extensions) {
   var extension = function(module, filename) {
-
+    
     var templateString = fs.readFileSync(filename, "utf8");
     module.exports = handlebars.compile(templateString);
   };
@@ -8799,137 +8799,6 @@ module.exports = function (string, locale) {
 };
 
 },{"camel-case":8,"upper-case-first":56}],58:[function(require,module,exports){
-/**
- * Map dependencies to their environment.
- *
- * @type {Object}
- */
-var DEPS_MAP = {
-  node: {
-    popsicle: "require('popsicle')",
-    ClientOAuth2: "require('client-oauth2')"
-  },
-  amd: {
-    popsicle: "'popsicle'",
-    ClientOAuth2: "'ClientOAuth2'"
-  },
-  browser: {
-    popsicle: 'root.popsicle',
-    ClientOAuth2: 'root.ClientOAuth2'
-  }
-}
-
-/**
- * Map an array of dependency names to values.
- *
- * @param  {Array}  deps
- * @param  {String} env
- * @return {Array}
- */
-function mapDeps (deps, env) {
-  if (!env) {
-    return deps
-  }
-
-  return deps.map(function (dep) {
-    return DEPS_MAP[env][dep]
-  })
-}
-
-/**
- * Create a dependencies string.
- *
- * @param  {Object} context
- * @param  {String} env
- * @return {String}
- */
-module.exports = function (context, env) {
-  var deps = ['popsicle']
-
-  // OAuth 2.0 depends on ClientOAuth2 to work.
-  if (context.security['OAuth 2.0']) {
-    deps.push('ClientOAuth2')
-  }
-
-  // Returns an array of strings for AMD.
-  if (env === 'amd') {
-    return '[' + mapDeps(deps, env).join(', ') + ']'
-  }
-
-  return mapDeps(deps, env).join(', ')
-}
-
-},{}],59:[function(require,module,exports){
-/**
- * Iterate over the parameters and turn into a string.
- *
- * @param  {Object} parameters
- * @return {String}
- */
-module.exports = function (parameters) {
-  return Object.keys(parameters).map(function (key) {
-    var parameter = parameters[key]
-    var title = '* **' + parameter.displayName + '**'
-    var options = []
-
-    if (parameter.type) {
-      options.push(parameter.type)
-    }
-
-    if (Array.isArray(parameter.enum) && parameter.enum.length) {
-      options.push('one of (' + parameter.enum.join(', ') + ')')
-    }
-
-    if (parameter.default) {
-      options.push('default: ' + parameter.default)
-    }
-
-    return title +
-      (options.length ? ' _' + options.join(', ') + '_' : '') +
-      (parameter.description ? '\n\n' + parameter.description : '')
-  }).join('\n\n')
-}
-
-},{}],60:[function(require,module,exports){
-/**
- * Pull out request parameters from the resource.
- *
- * @param  {Object} resource
- * @return {String}
- */
-var params = function (resource) {
-  return resource.uriParameters.map(function (param) {
-    return param.displayName
-  }).join(', ')
-}
-
-/**
- * Stringify a resource into a request snippet.
- *
- * @param  {Object} resource
- * @return {String}
- */
-module.exports = function (resource) {
-  var parts = []
-  var part = resource
-
-  while (part && part.parent) {
-    var segment = part.key
-
-    // If uri parameters exist, push onto the stack.
-    if (part.uriParameters.length) {
-      segment += '(' + params(part) + ')'
-    }
-
-    parts.unshift(segment)
-
-    part = part.parent
-  }
-
-  return 'resources' + (parts.length ? '.' + parts.join('.') : '')
-}
-
-},{}],61:[function(require,module,exports){
 var pick = require('object.pick')
 
 /**
@@ -8944,7 +8813,7 @@ module.exports = function (documentation) {
   }) : []
 }
 
-},{"object.pick":50}],62:[function(require,module,exports){
+},{"object.pick":50}],59:[function(require,module,exports){
 var extend = require('extend')
 var sanitizeUri = require('./uri')
 var sanitizeSecurity = require('./security')
@@ -9071,7 +8940,7 @@ module.exports = function (ast, spec) {
   return context
 }
 
-},{"./documentation":61,"./parameters":64,"./resources":65,"./security":66,"./uri":67,"extend":14,"methods":49}],63:[function(require,module,exports){
+},{"./documentation":58,"./parameters":61,"./resources":62,"./security":63,"./uri":64,"extend":14,"methods":49}],60:[function(require,module,exports){
 var pick = require('object.pick')
 var sanitizeParameters = require('./parameters')
 
@@ -9131,7 +9000,7 @@ module.exports = function (methods, resource, spec) {
   return obj
 }
 
-},{"./parameters":64,"object.pick":50}],64:[function(require,module,exports){
+},{"./parameters":61,"object.pick":50}],61:[function(require,module,exports){
 var pick = require('object.pick')
 
 /**
@@ -9187,7 +9056,7 @@ module.exports = function (parameters) {
   return obj
 }
 
-},{"object.pick":50}],65:[function(require,module,exports){
+},{"object.pick":50}],62:[function(require,module,exports){
 var sanitizeUri = require('./uri')
 var sanitizeMethods = require('./methods')
 var sanitizeParameters = require('./parameters')
@@ -9377,7 +9246,7 @@ module.exports = function (resources, spec) {
   return obj
 }
 
-},{"./methods":63,"./parameters":64,"./uri":67}],66:[function(require,module,exports){
+},{"./methods":60,"./parameters":61,"./uri":64}],63:[function(require,module,exports){
 /**
  * Sanitize resources into nested object form.
  *
@@ -9402,7 +9271,7 @@ module.exports = function (securitySchemes) {
   return obj
 }
 
-},{}],67:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 /**
  * Sanitize all uris.
  *
@@ -9414,7 +9283,7 @@ module.exports = function (uri, spec) {
   return (uri || '').replace(/\/+$/, '')
 }
 
-},{}],68:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 var indent = require('indent-string')
 var Handlebars = require('handlebars')
 var _trim = String.prototype.trim
@@ -9623,7 +9492,7 @@ exports.escape = function (str) {
   return Handlebars.Utils.escapeExpression(str)
 }
 
-},{"camel-case":8,"constant-case":13,"handlebars":32,"indent-string":44,"lower-case":48,"param-case":55,"pascal-case":57,"snake-case":75,"upper-case":76}],69:[function(require,module,exports){
+},{"camel-case":8,"constant-case":13,"handlebars":32,"indent-string":44,"lower-case":48,"param-case":55,"pascal-case":57,"snake-case":75,"upper-case":76}],66:[function(require,module,exports){
 var extend = require('extend')
 var Handlebars = require('handlebars')
 var libHelpers = require('./lib/helpers')
@@ -9708,7 +9577,138 @@ function compile (obj, helpers) {
   return templates
 }
 
-},{"./lib/context":62,"./lib/helpers":68,"extend":14,"handlebars":32}],70:[function(require,module,exports){
+},{"./lib/context":59,"./lib/helpers":65,"extend":14,"handlebars":32}],67:[function(require,module,exports){
+/**
+ * Map dependencies to their environment.
+ *
+ * @type {Object}
+ */
+var DEPS_MAP = {
+  node: {
+    popsicle: "require('popsicle')",
+    ClientOAuth2: "require('client-oauth2')"
+  },
+  amd: {
+    popsicle: "'popsicle'",
+    ClientOAuth2: "'ClientOAuth2'"
+  },
+  browser: {
+    popsicle: 'root.popsicle',
+    ClientOAuth2: 'root.ClientOAuth2'
+  }
+}
+
+/**
+ * Map an array of dependency names to values.
+ *
+ * @param  {Array}  deps
+ * @param  {String} env
+ * @return {Array}
+ */
+function mapDeps (deps, env) {
+  if (!env) {
+    return deps
+  }
+
+  return deps.map(function (dep) {
+    return DEPS_MAP[env][dep]
+  })
+}
+
+/**
+ * Create a dependencies string.
+ *
+ * @param  {Object} context
+ * @param  {String} env
+ * @return {String}
+ */
+module.exports = function (context, env) {
+  var deps = ['popsicle']
+
+  // OAuth 2.0 depends on ClientOAuth2 to work.
+  if (context.security['OAuth 2.0']) {
+    deps.push('ClientOAuth2')
+  }
+
+  // Returns an array of strings for AMD.
+  if (env === 'amd') {
+    return '[' + mapDeps(deps, env).join(', ') + ']'
+  }
+
+  return mapDeps(deps, env).join(', ')
+}
+
+},{}],68:[function(require,module,exports){
+/**
+ * Iterate over the parameters and turn into a string.
+ *
+ * @param  {Object} parameters
+ * @return {String}
+ */
+module.exports = function (parameters) {
+  return Object.keys(parameters).map(function (key) {
+    var parameter = parameters[key]
+    var title = '* **' + parameter.displayName + '**'
+    var options = []
+
+    if (parameter.type) {
+      options.push(parameter.type)
+    }
+
+    if (Array.isArray(parameter.enum) && parameter.enum.length) {
+      options.push('one of (' + parameter.enum.join(', ') + ')')
+    }
+
+    if (parameter.default) {
+      options.push('default: ' + parameter.default)
+    }
+
+    return title +
+      (options.length ? ' _' + options.join(', ') + '_' : '') +
+      (parameter.description ? '\n\n' + parameter.description : '')
+  }).join('\n\n')
+}
+
+},{}],69:[function(require,module,exports){
+/**
+ * Pull out request parameters from the resource.
+ *
+ * @param  {Object} resource
+ * @return {String}
+ */
+var params = function (resource) {
+  return resource.uriParameters.map(function (param) {
+    return param.displayName
+  }).join(', ')
+}
+
+/**
+ * Stringify a resource into a request snippet.
+ *
+ * @param  {Object} resource
+ * @return {String}
+ */
+module.exports = function (resource) {
+  var parts = []
+  var part = resource
+
+  while (part && part.parent) {
+    var segment = part.key
+
+    // If uri parameters exist, push onto the stack.
+    if (part.uriParameters.length) {
+      segment += '(' + params(part) + ')'
+    }
+
+    parts.unshift(segment)
+
+    part = part.parent
+  }
+
+  return 'resources' + (parts.length ? '.' + parts.join('.') : '')
+}
+
+},{}],70:[function(require,module,exports){
 var path = require('path')
 
 var generator = require('raml-generator')
@@ -9717,8 +9717,8 @@ module.exports = generator({
   templates: {
     '.gitignore': "node_modules\n",
     'index.js': "(function (root, client) {\n  if (typeof define === 'function' && define.amd) {\n    define({{{dependencies this 'amd'}}}, client)\n  } else if (typeof exports === 'object') {\n    module.exports = client({{{dependencies this 'node'}}})\n  } else {\n    root.{{pascalCase title}} = client({{{dependencies this 'browser'}}})\n  }\n})(this, function ({{{dependencies this false}}}) {\n{{#indent 2}}\n{{>utils}}\n\n{{>resources}}\n\n{{>client}}\n\n{{>auth}}\n\nreturn Client\n{{/indent}}\n})\n",
-    'README.md': "# {{title}}\n\nBrowser and node module for making API requests against [{{title}}]({{baseUri}}).\n\n**Please note: This module uses [Popsicle](https://github.com/blakeembrey/popsicle) to make API requests. Promises must be supported or polyfilled on all target environments.**\n\n## Installation\n\n```\nnpm install {{paramCase title}} --save\nbower install {{paramCase title}} --save\n```\n\n## Usage\n\n### Node\n\n```javascript\nvar {{pascalCase title}} = require('{{paramCase title}}');\n\nvar client = new {{pascalCase title}}();\n```\n\n### Browsers\n\n```html\n<script src=\"{{paramCase title}}/index.js\">\n\n<script>\n  var client = new window.{{pascalCase title}}();\n</script>\n```\n\n{{#if security.[OAuth 2.0]}}\n### Authentication\n\n#### OAuth 2.0\n\nThis API supports authentication with [OAuth 2.0](https://github.com/mulesoft/js-client-oauth2). Initialize the `OAuth2` instance with the application client id, client secret and a redirect uri to authenticate with users.\n\n```js\nvar auth = new {{pascalCase title}}.OAuth2({\n  clientId:     '123',\n  clientSecret: 'abc',\n  redirectUri:  'http://example.com/auth/callback'\n});\n```\n\n**All `getToken()` calls are asynchronous and return promise objects which resolve to an access token instance.**\n\n{{#if (contains security.[OAuth 2.0].settings.authorizationGrants 'code')}}\n##### [Authorization Code Grant](https://github.com/mulesoft/js-client-oauth2#authorization-code-grant)\n\n1. Redirect user to `auth.code.getUri()`.\n2. Parse response uri and get an access token instance using `auth.code.getToken(uri)`.\n\n{{/if}}{{#if (contains security.[OAuth 2.0].settings.authorizationGrants 'token')}}\n##### [Implicit Grant](https://github.com/mulesoft/js-client-oauth2#implicit-grant)\n\n1. Redirect user to `auth.token.getUri()` in a browser.\n2. Parse response uri and get an access token instance using `auth.token.getToken(uri)`.\n\n{{/if}}{{#if (contains security.[OAuth 2.0].settings.authorizationGrants 'owner')}}\n##### [Resource Owner Password Credentials Grant](https://github.com/mulesoft/js-client-oauth2#resource-owner-password-credentials-grant)\n\n1. Make a direct request for the access token on behalf of the user using `auth.owner.getToken(username, password)`.\n\n{{/if}}{{#if (contains security.[OAuth 2.0].settings.authorizationGrants 'credentials')}}\n##### [Client Credentials Grant](https://github.com/mulesoft/js-client-oauth2#client-credentials-grant)\n\n1. Get the access token for the application by using `auth.credentials.getToken()`.\n\n{{/if}}##### Access Tokens\n\nAccess token instances can be manually re-created. This is critical for access token reuse, such as saving credentials to a database for reusing later in the codebase.\n\n```js\nvar token = auth.createToken('access token', 'refresh token');\n```\n\nAn access token instance (manually created or automatically generated by a `getToken()` method) can be passed into any API request. This will sign the API request with the current users access token credentials.\n\n```js\n// Existing API client instance.\nclient.resource('/').get(null, {\n  user: token\n});\n\n// New API client instance.\nvar client = new {{pascalCase title}}({\n  user: token\n});\n```\n\n{{/if}}### Options\n\nYou can set options when you initialize a client or at any time with the `options` property. You may also override options for a single request by passing an object as the second argument of any request method. For example:\n\n```javascript\nvar client = new {{pascalCase title}}({ ... });\n\nclient.options = { ... };\n\nclient.resource('/').get(null, {\n  baseUri: 'http://example.com',\n  headers: {\n    'Content-Type': 'application/json'\n  }\n});\n```\n\n#### Base URI\n\nYou can override the base URI by setting the `baseUri` property, or initializing a client with a base URI. For example:\n\n```javascript\nnew {{pascalCase title}}({\n  baseUri: 'https://example.com'\n});\n```\n\n#### Base URI Parameters\n\nIf the base URI has parameters inline, you can set them by updating the `baseUriParameters` property. For example:\n\n```javascript\nclient.options.baseUriParameters.version = '{{#if version}}{{version}}{{else}}v3{{/if}}';\n```\n\n### Resources\n\nAll methods return a HTTP request instance of [Popsicle](https://github.com/blakeembrey/popsicle), which allows the use of promises (and streaming in node).\n\n{{#each allResources}}{{#if (keys methods)}}#### {{{requestSnippet this}}}\n\n{{#if uriParameters}}{{{parametersSnippet uriParameters}}}\n\n{{/if}}{{#if description}}{{{description}}}\n\n{{/if}}\n```js\nvar resource = client.{{{requestSnippet this}}};\n```\n\n{{#each methods}}##### {{upperCase method}}\n\n{{#if description}}{{{description}}}\n\n{{/if}}\n```js\nresource.{{key}}().then(function (res) { ... });\n```\n\n{{#if (keys queryParameters)}}##### Query Parameters\n\n```javascript\n{{#if (equal method 'get')}}\nresource.{{key}}({ ... });\n{{else}}\nresource.{{key}}(null, { query: { ... } });\n{{/if}}\n```\n\n{{{parametersSnippet queryParameters}}}\n\n{{/if}}{{#if (keys headers)}}##### Headers\n\n```javascript\nresource.{{key}}(null, {\n  headers: { ... }\n});\n```\n\n{{{parametersSnippet headers}}}\n\n{{/if}}{{#if (keys body)}}##### Body\n\n{{#each body}}\n**{{@key}}**\n\n{{#if schema}}\n```\n{{{schema}}}\n```\n\n{{/if}}{{#if formParameters}}{{{json formParameters 2}}}\n\n{{/if}}{{/each}}{{/if}}{{/each}}{{/if}}{{/each}}\n\n### Custom Resources\n\nYou can make requests to a custom path in the API using the `#resource(path)` method.\n\n```javascript\nclient.resource('/example/path').get();\n```\n\n## License\n\nApache 2.0\n",
-    'INSTALL.md': "# Installation\n\nFollow these instructions to publish and subsequently install the module in your project.\n\n## Git\n\n```\n# Initialize with git\ngit init\ngit add .\ngit commit -m \"initial commit\"\ngit push [git-url]\n\n# Install in project from git\nnpm install [git-url] --save\n```\n\n## Source Directory\n\n```\n# Link module globally\nnpm link\n\n# Link in project to local module\nnpm link {{paramCase title}}\n```\n\n**Note:** You should publish it before you use it publicly.\n\n## NPM\n\n```\n# Publish to npm\nnpm publish\n\n# Install from npm\nnpm install {{paramCase title}} --save\n```\n\n## Bower\n\n```\n# Register with bower\nbower register {{paramCase title}} [git-url]\n\n# Install from bower\nbower install {{paramCase title}} --save\n```\n",
+    'README.md': "# {{title}}\n\nBrowser and node module for making API requests against [{{title}}]({{baseUri}}).\n\n**Please note: This module uses [Popsicle](https://github.com/blakeembrey/popsicle) to make API requests. Promises must be supported or polyfilled on all target environments.**\n\n## Installation\n\n```\nnpm install {{paramCase title}} --save\nbower install {{paramCase title}} --save\n```\n\n## Usage\n\n### Node\n\n```javascript\nvar {{pascalCase title}} = require('{{paramCase title}}');\n\nvar client = new {{pascalCase title}}();\n```\n\n### Browsers\n\n```html\n<script src=\"{{paramCase title}}/index.js\"></script>\n\n<script>\n  var client = new {{pascalCase title}}();\n</script>\n```\n\n{{#if security.[OAuth 2.0]}}\n### Authentication\n\n#### OAuth 2.0\n\nThis API supports authentication with [OAuth 2.0](https://github.com/mulesoft/js-client-oauth2). Initialize the `OAuth2` instance with the application client id, client secret and a redirect uri to authenticate with users.\n\n```js\nvar auth = new {{pascalCase title}}.OAuth2({\n  clientId:     '123',\n  clientSecret: 'abc',\n  redirectUri:  'http://example.com/auth/callback'\n});\n```\n\n**All `getToken()` calls are asynchronous and return promise objects which resolve to an access token instance.**\n\n{{#if (contains security.[OAuth 2.0].settings.authorizationGrants 'code')}}\n##### [Authorization Code Grant](https://github.com/mulesoft/js-client-oauth2#authorization-code-grant)\n\n1. Redirect user to `auth.code.getUri()`.\n2. Parse response uri and get an access token instance using `auth.code.getToken(uri)`.\n\n{{/if}}{{#if (contains security.[OAuth 2.0].settings.authorizationGrants 'token')}}\n##### [Implicit Grant](https://github.com/mulesoft/js-client-oauth2#implicit-grant)\n\n1. Redirect user to `auth.token.getUri()` in a browser.\n2. Parse response uri and get an access token instance using `auth.token.getToken(uri)`.\n\n{{/if}}{{#if (contains security.[OAuth 2.0].settings.authorizationGrants 'owner')}}\n##### [Resource Owner Password Credentials Grant](https://github.com/mulesoft/js-client-oauth2#resource-owner-password-credentials-grant)\n\n1. Make a direct request for the access token on behalf of the user using `auth.owner.getToken(username, password)`.\n\n{{/if}}{{#if (contains security.[OAuth 2.0].settings.authorizationGrants 'credentials')}}\n##### [Client Credentials Grant](https://github.com/mulesoft/js-client-oauth2#client-credentials-grant)\n\n1. Get the access token for the application by using `auth.credentials.getToken()`.\n\n{{/if}}##### Access Tokens\n\nAccess token instances can be manually re-created. This is critical for access token reuse, such as saving credentials to a database for reusing later in the codebase.\n\n```js\nvar token = auth.createToken('access token', 'refresh token');\n```\n\nAn access token instance (manually created or automatically generated by a `getToken()` method) can be passed into any API request. This will sign the API request with the current users access token credentials.\n\n```js\n// Existing API client instance.\nclient.resource('/').get(null, {\n  user: token\n});\n\n// New API client instance.\nvar client = new {{pascalCase title}}({\n  user: token\n});\n```\n\n{{/if}}### Options\n\nYou can set options when you initialize a client or at any time with the `options` property. You may also override options for a single request by passing an object as the second argument of any request method. For example:\n\n```javascript\nvar client = new {{pascalCase title}}({ ... });\n\nclient.options = { ... };\n\nclient.resource('/').get(null, {\n  baseUri: 'http://example.com',\n  headers: {\n    'Content-Type': 'application/json'\n  }\n});\n```\n\n#### Base URI\n\nYou can override the base URI by setting the `baseUri` property, or initializing a client with a base URI. For example:\n\n```javascript\nnew {{pascalCase title}}({\n  baseUri: 'https://example.com'\n});\n```\n\n#### Base URI Parameters\n\nIf the base URI has parameters inline, you can set them by updating the `baseUriParameters` property. For example:\n\n```javascript\nclient.options.baseUriParameters.version = '{{#if version}}{{version}}{{else}}v3{{/if}}';\n```\n\n### Resources\n\nAll methods return a HTTP request instance of [Popsicle](https://github.com/blakeembrey/popsicle), which allows the use of promises (and streaming in node).\n\n{{#each allResources}}{{#if (keys methods)}}#### {{{requestSnippet this}}}\n\n{{#if uriParameters}}{{{parametersSnippet uriParameters}}}\n\n{{/if}}{{#if description}}{{{description}}}\n\n{{/if}}\n```js\nvar resource = client.{{{requestSnippet this}}};\n```\n\n{{#each methods}}##### {{upperCase method}}\n\n{{#if description}}{{{description}}}\n\n{{/if}}\n```js\nresource.{{key}}().then(function (res) { ... });\n```\n\n{{#if (keys queryParameters)}}##### Query Parameters\n\n```javascript\n{{#if (equal method 'get')}}\nresource.{{key}}({ ... });\n{{else}}\nresource.{{key}}(null, { query: { ... } });\n{{/if}}\n```\n\n{{{parametersSnippet queryParameters}}}\n\n{{/if}}{{#if (keys headers)}}##### Headers\n\n```javascript\nresource.{{key}}(null, {\n  headers: { ... }\n});\n```\n\n{{{parametersSnippet headers}}}\n\n{{/if}}{{#if (keys body)}}##### Body\n\n{{#each body}}\n**{{@key}}**\n\n{{#if schema}}\n```\n{{{schema}}}\n```\n\n{{/if}}{{#if formParameters}}{{{json formParameters 2}}}\n\n{{/if}}{{/each}}{{/if}}{{/each}}{{/if}}{{/each}}\n\n### Custom Resources\n\nYou can make requests to a custom path in the API using the `#resource(path)` method.\n\n```javascript\nclient.resource('/example/path').get();\n```\n\n## License\n\nApache 2.0\n",
+    'INSTALL.md': "# Installation\n\nFollow these instructions to publish and subsequently install the module in your project.\n\n## Git\n\n```bash\n# Initialize with git\ngit init\ngit add .\ngit commit -m \"initial commit\"\ngit push [git-url]\n\n# Install in project from git\nnpm install [git-url] --save\n```\n\n## Source Directory\n\n```bash\n# Link module globally\nnpm link\n\n# Link in project to local module\nnpm link {{paramCase title}}\n```\n\n**Note:** You should publish it before you use it publicly.\n\n## NPM\n\n```bash\n# Publish to npm\nnpm publish\n\n# Install from npm\nnpm install {{paramCase title}} --save\n```\n\n## Bower\n\n```bash\n# Register with bower\nbower register {{paramCase title}} [git-url]\n\n# Install from bower\nbower install {{paramCase title}} --save\n```\n",
     'package.json': "{\n  \"name\": \"{{paramCase title}}\",\n  \"version\": \"0.0.0\",\n  \"description\": \"{{description}}\",\n  \"main\": \"index.js\",\n  \"files\": [\n    \"index.js\"\n  ],\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git://github.com/mulesoft/raml-javascript-generator.git\"\n  },\n  \"keywords\": [\n    \"raml-api\"\n  ],\n  \"author\": \"MuleSoft, Inc.\",\n  \"license\": \"Apache 2.0\",\n  \"bugs\": {\n    \"url\": \"https://github.com/mulesoft/raml-javascript-generator/issues\"\n  },\n  \"homepage\": \"https://github.com/mulesoft/raml-javascript-generator\",\n  \"dependencies\": {\n    {{#if security.[OAuth 2.0]}}\"client-oauth2\": \"^0.2.4\",\n    {{/if}}\"popsicle\": \"^0.5.6\"\n  }\n}\n"
   },
   partials: {
@@ -9735,7 +9735,7 @@ module.exports = generator({
   }
 })
 
-},{"./lib/helpers/dependencies":58,"./lib/helpers/parameters-snippet":59,"./lib/helpers/request-snippet":60,"javascript-stringify":47,"path":6,"raml-generator":69}],71:[function(require,module,exports){
+},{"./lib/helpers/dependencies":67,"./lib/helpers/parameters-snippet":68,"./lib/helpers/request-snippet":69,"javascript-stringify":47,"path":6,"raml-generator":66}],71:[function(require,module,exports){
 arguments[4][9][0].apply(exports,arguments)
 },{"./vendor/camel-case-regexp":72,"./vendor/non-word-regexp":73,"./vendor/trailing-digit-regexp":74,"dup":9,"lower-case":48}],72:[function(require,module,exports){
 arguments[4][10][0].apply(exports,arguments)
