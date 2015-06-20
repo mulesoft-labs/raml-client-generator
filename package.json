@@ -1,6 +1,6 @@
 {
   "name": "raml-client-generator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Template-driven generator of clients for APIs described by RAML",
   "main": "raml-client-generator.js",
   "files": [
