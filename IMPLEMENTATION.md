@@ -1,54 +1,10 @@
 # Language Implementation
 
-## Creating a New Language
+## Creating New Clients
 
-Start by creating a new folder definition under `language` and exporting it in `languages/index.js`. The JavaScript implementation is a good starting reference point, but you shouldn't need to implement any logic aside from the templates. The generation function can be created by passing an object specification in that represents the templates, partials, helpers, formatting (for language compliance - `camelCase` vs `PascalCase`) and file creation override.
+You can create clients from the [`raml-generator`](https://github.com/mulesoft-labs/raml-generator) project. It's a thin layer that combines Handlebars templates and a RAML object to generate files in a way that can be used via the command line, other projects or even in the browser.
 
-```js
-generator({
-  // Generator templates that are used to create the files from and are passed
-  // into the `files` callback.
-  templates: {
-    '.gitignore':   require('./templates/.gitignore.hbs'),
-    'index.js':     require('./templates/index.js.hbs'),
-    'README.md':    require('./templates/README.md.hbs'),
-    'package.json': require('./templates/package.json.hbs')
-  },
-  // Language-specific formatting options.
-  format: {
-    variable: require('camel-case')
-  },
-  // Partials are normal in Handlebars. It's unlikely you'll be using
-  // this option since you can have a template for every file.
-  partials: {
-    auth:      require('./partials/auth.js.hbs'),
-    utils:     require('./partials/utils.js.hbs'),
-    client:    require('./partials/client.js.hbs'),
-    resources: require('./partials/resources.js.hbs')
-  },
-  // Custom language-specific Handlebars helpers. These merge with the defaults
-  // that are included in the generator.
-  helpers: {
-    stringify:         require('javascript-stringify'),
-    dependencies:      require('./helpers/dependencies'),
-    requestSnippet:    require('./helpers/request-snippet'),
-    parametersSnippet: require('./helpers/parameters-snippet')
-  },
-  // Override the file creation process. Below is the default which creates
-  // files based on the template names.
-  files: function (templates, context, options) {
-    var files = {};
-
-    Object.keys(templates).forEach(function (key) {
-      var template = templates[key];
-
-      files[key] = template(context, options);
-    });
-
-    return files;
-  }
-});
-```
+The [JavaScript Generator](https://github.com/mulesoft-labs/raml-javascript-generator) provides a basic outline of how to get started.
 
 ## DSL
 
