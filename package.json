@@ -48,13 +48,13 @@
   "homepage": "https://github.com/mulesoft/raml-client-generator",
   "devDependencies": {
     "brfs": "^1.4.0",
-    "browserify": "^10.2.4",
+    "browserify": "^13.0.0",
     "pre-commit": "^1.0.4",
-    "standard": "^4.2.1"
+    "standard": "^6.0.5"
   },
   "dependencies": {
     "raml-generator": "^0.1.3",
-    "raml-javascript-generator": "0.0.4",
-    "yargs": "^3.11.0"
+    "raml-javascript-generator": "0.1.2",
+    "yargs": "^4.1.0"
   }
 }
