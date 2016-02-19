@@ -50,7 +50,7 @@
     "brfs": "^1.4.0",
     "browserify": "^10.2.4",
     "pre-commit": "^1.0.4",
-    "standard": "^4.2.1"
+    "standard": "^6.0.6"
   },
   "dependencies": {
     "raml-generator": "^0.1.3",
