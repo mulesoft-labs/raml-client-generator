@@ -55,6 +55,6 @@
   "dependencies": {
     "raml-generator": "^0.1.3",
     "raml-javascript-generator": "0.1.2",
-    "yargs": "^4.1.0"
+    "yargs": "^10.0.0"
   }
 }
