@@ -53,8 +53,8 @@
     "standard": "^6.0.5"
   },
   "dependencies": {
-    "raml-generator": "^0.1.3",
-    "raml-javascript-generator": "0.1.2",
+    "raml-generator": "^2.0.0",
+    "raml-javascript-generator": "2.0.0",
     "yargs": "^4.1.0"
   }
 }
